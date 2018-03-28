@@ -1,8 +1,6 @@
 <?php get_header();
-   $sidebar = get_post_meta($post->ID, "sidebar");
-   $breadcrumbs = get_post_meta($post->ID, "breadcrumb");
- ?>
-	<?php get_template_part( 'header', 'image' ); ?>
+
+ get_template_part( 'header', 'image' ); ?>
 
 	<!--<div class="col-md-12 mobile-menu"> <?php get_template_part( 'menu', 'mobile' ); ?> </div>-->
 	<div class="container uams-body">

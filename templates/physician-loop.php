@@ -4,15 +4,6 @@
 	 *  Designed for physicians
 	 */
 ?>
-	<?php 
-	// $args = array(
-	// 	    'post_type' => 'physicians',
-	// 	    'facetwp' => true,
-	// );
-
-	// $query = new WP_Query( $args );
-	?>
-
 	<?php $i = 0; ?>
 	<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
 	<?php $class = ($i%2 == 0)? 'whiteBackground': 'grayBackground'; ?>

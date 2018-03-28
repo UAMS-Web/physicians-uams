@@ -44,9 +44,9 @@
 						return;
 					}
 
-					console.log('ajax success');
+					console.log('ajax success: ' + json['id'] );
 
-					console.log(json);
+					//console.log(json);
 
 					//console.log($pminfo);
 

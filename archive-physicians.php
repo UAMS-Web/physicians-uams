@@ -1,8 +1,5 @@
 <?php get_header();
-   $sidebar = get_post_meta($post->ID, "sidebar");
-   $breadcrumbs = get_post_meta($post->ID, "breadcrumb");
- ?>
-<?php
+
 	function custom_field_excerpt($title) {
 			global $post;
 			$text = get_field($title);
@@ -21,66 +18,41 @@
 	}
 	add_filter( 'excerpt_length', 'wpdocs_custom_excerpt_length', 999 );
 
-	?>
-	<?php get_template_part( 'header', 'image' ); ?>
+	add_filter( 'facetwp_template_use_archive', '__return_true' );
 
-	<script>
-(function($) {
-    $(document).on('facetwp-loaded', function() {
-        $.each(FWP.settings.num_choices, function(key, val) {
-            var $parent = $('.facetwp-facet-' + key).closest('.fwp-widget');
-            (0 === val) ? $parent.hide() : $parent.show();
-        });
-    });
-})(jQuery);
-</script>
+	get_template_part( 'header', 'image' ); ?>
 
-	<!--<div class="col-md-12 mobile-menu"> <?php get_template_part( 'menu', 'mobile' ); ?> </div>-->
 	<div class="container uams-body">
 
 	  <div class="row">
 
 	    <div class="col-md-12 uams-content" role='main'>
 
-	      <?php
-		      if((!isset($breadcrumbs[0]) || $breadcrumbs[0]!="on")) {
-		      	get_template_part( 'breadcrumbs' );
-		      }
-		  ?>
+	    <?php // Hard coded breadcrumbs ?>
+	    <nav class="uams-breadcrumbs" role="navigation" aria-label="breadcrumbs">
+	    	<ul>
+	    		<li><a href="http://www.uams.edu" title="University of Arkansas for Medical Scineces">Home</a></li>
+	    		<li><a href="/" title="<?php echo str_replace('   ', ' ', get_bloginfo('title')); ?>"><?php echo str_replace('   ', ' ', get_bloginfo('title')); ?></a></li>
+	    		<li class="current"><span>Physicians</span></li>
+	    	</ul>
+	    </nav>
 
 	      <div id='main_content' class="uams-body-copy" tabindex="-1">
 
-		       <style>
-				    .whiteBackground { background-color: #fff; }
-					.grayBackground { background-color: #fafafa; }
-				</style>
-				<!-- <script>
-					(function($) {
-					    $(document).on('facetwp-refresh', function() {
-					        if (FWP.loaded) {
-					            $('.facetwp-template').prepend('<div class="loading"><div class="facetwp-loading" style="text-align: center; width:40px; height:40px; background-size:40px 40px;"></div></div>');
-					        }
-					    });
-					})(jQuery);
-				</script> -->
-				
-				<script>
-				    
-				$(function() {
-				    $(document).on('facetwp-refresh', function() {
-				        if (! FWP.loaded) {
-				            FWP.set_hash = function() { /* empty function */ }
-				        }
-				    });
-				})(jQuery);
+	      		<?php 
+					$fwp_filter = '';
+					$uri = $_SERVER["REQUEST_URI"];
+					if( strpos($uri, 'fwp_') !== false ) {
+						$fwp_filter = 'active="true"';
+					}
+				 ?>
 
-				</script>
 				<div class="row">
 		        	<div class="col-md-4">
 			        	<?php echo do_shortcode( '[wpdreams_ajaxsearchpro id=1]' ); ?>
 			        	<?php echo do_shortcode( '[accordion]
-													    [section title="Advanced Filter"]
-														<div class="fwp-filter">[facetwp facet="primary_care"]</div>
+													    [section title="Advanced Filter" '. $fwp_filter .']			
+													    <div class="fwp-filter">[facetwp facet="primary_care"]</div>
 														<div class="fwp-filter">[facetwp facet="conditions"]</div>
 														<div class="fwp-filter">[facetwp facet="patient_types"]</div>
 														<div class="fwp-filter">[facetwp facet="physician_gender"]</div>
@@ -94,7 +66,7 @@
 						<?php echo facetwp_display( 'template', 'physician' ); ?>
 						<?php //get_template_part( 'templates/physician-loop' ); ?>
 						<?php //echo facetwp_display( 'pager' ); ?>
-						<?php echo do_shortcode('[facetwp load_more="true" label="Load more"]'); ?>
+						<?php //echo do_shortcode('[facetwp load_more="true" label="Load more"]'); ?>
 					</div><!-- .col -->
 				</div><!-- .row -->
 

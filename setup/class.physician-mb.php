@@ -55,24 +55,14 @@ if($wpdb->get_var("SHOW TABLES LIKE '{$wpdb->prefix}uams_physicians'") != "{$wpd
           'physician_short_clinical_bio' => 'VARCHAR(255) NOT NULL',
           'physician_gender' => 'VARCHAR(10) NOT NULL',
           'physician_youtube_link' => 'VARCHAR(255) NOT NULL',
-          //'physician_languages' => 'VARCHAR(255) DEFAULT "a:0{}" NOT NULL',
-          //'physician_locations' => 'VARCHAR(255) DEFAULT "a:0{}" NOT NULL',
-          //'physician_affiliation' => 'TEXT NOT NULL',
           'physician_appointment_link' => 'VARCHAR(255) NOT NULL',
           'physician_primary_care' => 'TINYINT(2) NOT NULL',
           'physician_referral_required' => 'TINYINT(2) NOT NULL',
           'physician_accepting_patients' => 'TINYINT(2) NOT NULL',
           'physician_second_opinion' => 'TINYINT(2) NOT NULL',
-          //'physician_patient_types' => 'TEXT NOT NULL',
-          //'medical_specialties' => 'LONGTEXT NOT NULL',
-          //'physician_conditions' => 'LONGTEXT NOT NULL',
-          //'medical_procedures' => 'LONGTEXT NOT NULL',
-          //'medical_terms' => 'LONGTEXT NOT NULL',
           'physician_pid' => 'VARCHAR(10) NOT NULL',
           'physician_npi' => 'VARCHAR(10) NOT NULL',
           'physician_academic_title' => 'VARCHAR(255) NOT NULL',
-          //'physician_academic_college' => 'TEXT NOT NULL',
-          //'physician_academic_position' => 'TEXT NOT NULL',
           'physician_academic_bio' => 'LONGTEXT NOT NULL',
           'physician_academic_short_bio' => 'VARCHAR(255) NOT NULL',
           'physician_academic_office' => 'VARCHAR(255) NOT NULL',
@@ -80,7 +70,6 @@ if($wpdb->get_var("SHOW TABLES LIKE '{$wpdb->prefix}uams_physicians'") != "{$wpd
           'physician_contact_information' => 'LONGTEXT NOT NULL',
           'physician_academic_appointment' => 'LONGTEXT NOT NULL',
           'physician_education' => 'LONGTEXT NOT NULL',
-          //'physician_boards' => 'LONGTEXT NOT NULL',
           'physician_research_profiles_link' => 'VARCHAR(255) NOT NULL',
           'physician_pubmed_author_id' => 'VARCHAR(10) NOT NULL',
           'pubmed_author_number' => 'TINYINT(2) NOT NULL',
@@ -231,29 +220,6 @@ function uams_physicians_register_meta_boxes( $meta_boxes ) {
 		    // )
 		  ),
     );
-
-    //return $meta_boxes;
-
-    // $meta_boxes[] = array (
-    //   'id' => 'physicians_type',
-    //   'title' => 'Profile Type',
-    //   'post_types' =>   array (
-    //      'physicians',
-    //   ),
-    //   'context' => 'normal',
-    //   'priority' => 'high',
-    //   'autosave' => true,
-    //   'fields' =>   array (
-         
-    //     array (
-    //       'id' => 'profile_type',
-    //       'type' => 'taxonomy',
-    //       'name' => 'Profile Type',
-    //       'taxonomy' => 'profile_type',
-    //       'field_type' => 'checkbox_list',
-    //     ),
-    //   ),
-    // );
 
     $meta_boxes[] = array (
       'id' => 'physicians',
@@ -599,12 +565,6 @@ function uams_physicians_register_meta_boxes( $meta_boxes ) {
           'tab' => 'tab_academic',
           'columns' => 12,
         ),
-
-        // array(
-        //   'type' => 'custom_html',
-        //   'std'  => '<br/>',
-        //   'tab' => 'tab_academic',
-        // ),
          
         array (
           'id' => 'physician_academic_college',
@@ -628,12 +588,6 @@ function uams_physicians_register_meta_boxes( $meta_boxes ) {
           //'placeholder' => 'Select an Item',
           'tab' => 'tab_academic',
         ),
-
-        // array(
-        //   'type' => 'custom_html',
-        //   'std'  => '<hr size="1"/><br/>',
-        //   'tab' => 'tab_academic',
-        // ),
          
         array (
           'id' => 'physician_academic_bio',
@@ -647,12 +601,6 @@ function uams_physicians_register_meta_boxes( $meta_boxes ) {
           ),
           'tab' => 'tab_academic',
         ),
-
-        // array(
-        //   'type' => 'custom_html',
-        //   'std'  => '<br/>',
-        //   'tab' => 'tab_academic',
-        // ),
          
         array (
           'id' => 'physician_academic_short_bio',
@@ -662,12 +610,6 @@ function uams_physicians_register_meta_boxes( $meta_boxes ) {
           'tab' => 'tab_academic',
           'columns' => 12,
         ),
-
-        // array(
-        //   'type' => 'custom_html',
-        //   'std'  => '<br/>',
-        //   'tab' => 'tab_academic',
-        // ),
          
         // array(
         //     'type' => 'heading',
@@ -735,15 +677,6 @@ function uams_physicians_register_meta_boxes( $meta_boxes ) {
           ),
           'tab' => 'tab_academic',
         ),
-
-        // array(
-        //     'type' => 'heading',
-        //     'name' => 'Contact Infomation',
-        //     'desc' => 'Optional description',
-        //     'tab' => 'tab_academic',
-        //     'columns' => 12,
-        // ),
-
 
         array(
           'id'     => 'physician_contact_information',
@@ -1080,22 +1013,6 @@ function uams_physicians_register_meta_boxes( $meta_boxes ) {
     return $meta_boxes;
 
 }
-
-
-
-// add_filter( 'rwmb_outside_conditions', function( $conditions ) {
-//     $conditions['.rwmb-tab-tab_clin_profile, .rwmb-tab-tab_clin_details'] = array(
-//         'visible' => array( 'profile_type', 'contains', '431' ) // Physician
-//     );
-//     $conditions['.rwmb-tab-tab_academic'] = array(
-//         'visible' => array( 'profile_type', 'contains', '6' ) // Academic
-//     );
-//     $conditions['.rwmb-tab-tab_edu, .rwmb-tab-tab_research, .rwmb-tab-tab_extra'] = array(
-//         'hidden' => array( 'profile_type', 0 ) // Not empty
-//     );
-
-//     return $conditions;
-// } );
 
 add_action( 'rwmb_enqueue_scripts', function ()
 {

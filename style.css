@@ -17,3 +17,12 @@ Version: 1.0
 .people h4 {
 	margin-top: 0;
 } 
+.whiteBackground { background-color: #fff; }
+.grayBackground { background-color: #fafafa; }
+.college-filter,
+.department-filter {
+	display:none !important;
+}
+.facetwp__loader button {
+    margin-right: 1em;
+}
