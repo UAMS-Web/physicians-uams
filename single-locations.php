@@ -210,77 +210,38 @@
 			</script>
 
 		    <div style="margin-bottom: 10px; max-width: 450px;"><?php echo do_shortcode( '[wpdreams_ajaxsearchpro id=1]' ); ?></div>
-		    <?php while ( have_posts() ) : the_post(); ?>
-		    	<h1><?php the_title(); ?></h1>
-
+		    <?php while ( have_posts() ) : the_post(); ?>	    	
 		    	<div class="row">
 			    	<div class="col-md-6">
-						<?php
-							$map = rwmb_get_value('location_map');
-
+			    		<h1><?php the_title(); ?></h1>
+							<?php $map = rwmb_get_value('location_map'); ?>
+					        <p><?php echo rwmb_meta('location_address_1', $args, get_the_ID() ); ?><br/>
+					            <?php echo ( rwmb_meta('location_address_2', $args ) ? rwmb_meta('location_address_2', $args) . '<br/>' : ''); ?>
+					            <?php echo rwmb_meta('location_city', $args); ?>, <?php echo rwmb_meta('location_state', $args); ?> <?php echo rwmb_meta('location_zip', $args, get_the_ID()); ?><br/>
+					            <?php echo rwmb_meta('location_phone', $args); ?>
+					            <?php echo ( rwmb_meta('location_fax', $args) ? '<br/>Fax: ' . rwmb_meta('location_fax', $args) . '' : ''); ?>
+					            <?php echo ( rwmb_meta('location_email', $args ) ? '<br/><a href="mailto:"' . rwmb_meta('location_email', $args ) . '">' . rwmb_meta('location_email', $args ) . '</a>' : ''); ?></p>
+					            
+					            <?php echo ( rwmb_meta('location_web_name', $args ) ? '<p><a class="uams-btn btn-blue btn-sm" href="' . rwmb_meta( 'location_url', $args ) . '" title="'. rwmb_meta('location_web_name', $args ) . '">Clinic Webpage</a></p>' : ''); ?>
+					            <p><a class="uams-btn btn-red btn-sm btn-external" href="https://www.google.com/maps/dir/Current+Location/<?php echo $map['latitude'] ?>,<?php echo $map['longitude'] ?>" target="_blank">Get Directions</a>
+					        </p>
+					        <?php echo ( rwmb_meta('location_appointments', $args ) ? '<h3>Appointments</h3><p>' . rwmb_meta('location_appointments', $args) . '</p>' : ''); ?>
+					        <?php echo ( rwmb_meta('location_hours', $args ) ? '<h3>Hours of Operation</h3><p>' . rwmb_meta('location_hours', $args) . '</p>' : ''); ?>	
+			    	</div>
+			    	<div class="col-md-6">
+			    		<?php if ( has_post_thumbnail() ) { ?>
+					            	<p>
+								    <?php the_post_thumbnail('medium-large', ['class' => 'img-responsive']); ?>
+									</p>
+								<?php } ?>
+			    	<?php
 							if( !empty($map) ):
 							?>
 							<div class="acf-map">
 								<div class="marker" data-lat="<?php echo $map['latitude']; ?>" data-lng="<?php echo $map['longitude']; ?>"></div>
 							</div>
-							<h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-								            <p><?php echo rwmb_meta('location_address_1', $args, get_the_ID() ); ?><br/>
-								            <?php echo ( rwmb_meta('location_address_2', $args ) ? rwmb_meta('location_address_2', $args) . '<br/>' : ''); ?>
-								            <?php echo rwmb_meta('location_city', $args); ?>, <?php echo rwmb_meta('location_state', $args); ?> <?php echo rwmb_meta('location_zip', $args, get_the_ID()); ?><br/>
-								            <?php echo rwmb_meta('location_phone', $args); ?>
-								            <?php echo ( rwmb_meta('location_fax', $args) ? '<br/>Fax: ' . rwmb_meta('location_fax', $args) . '' : ''); ?>
-								            <?php echo ( rwmb_meta('location_email', $args ) ? '<br/><a href="mailto:"' . rwmb_meta('location_email', $args ) . '">' . rwmb_meta('location_email', $args ) . '</a>' : ''); ?>
-								            <?php echo ( rwmb_meta('location_web_name', $args ) ? '<br/><a href="' . rwmb_meta( 'location_url', $args ) . '">' . rwmb_meta('location_web_name', $args ) . '</a>' : ''); ?>
-								            <br /><a href="https://www.google.com/maps/dir/Current+Location/<?php echo $map['latitude'] ?>,<?php echo $map['longitude'] ?>" target="_blank">Directions</a> [Opens in New Window]
-								        </p>
-							<?php endif; ?>
-			    	</div>
-			    	<div class="col-md-6 people">
-
-		    	<h2>Physicians at this location:</h2>
-		    	<?php
-
-						/*
-						*  Query posts for a relationship value.
-						*  This method uses the meta_query LIKE to match the string "123" to the database value a:1:{i:0;s:3:"123";} (serialized array)
-						*/
-
-						$physicians = new WP_Query( array(
-						    'relationship' => array(
-						        'id'   => 'physicians_to_locations',
-						        'to' => get_the_ID(), // You can pass object ID or full object
-						    ),
-						    'nopaging'     => true,
-						) );
-						//print_r($physicians);
-						?>
-						<?php if( $physicians ): ?>
-							<div>
-							<?php while ( $physicians->have_posts() ) : $physicians->the_post(); ?>
-								<?php
-
-								//$photo = rwmb_meta('physician_photo', $physician->ID);
-								$profileurl = get_permalink();//'/directory/physician/' .  get_post_field( 'post_name', $physician->ID) .'/';
-								$full_name = rwmb_meta('physician_first_name', $physician->ID) .' ' .(rwmb_meta('physician_middle_name', $physician->ID) ? rwmb_meta('physician_middle_name', $physician->ID) . ' ' : '') . rwmb_meta('physician_last_name', $physician->ID) . (rwmb_meta('physician_degree', $physician->ID) ? ', ' . rwmb_meta('physician_degree', $physician->ID) : '');
-
-								?>
-								<div class="row" style="border: 1px solid #eee; padding: .5em 0; margin: 5px 0;">
-									<div class="col-md-2">
-									<a href="<?php echo $profileurl; ?>">
-										<?php the_post_thumbnail( 'medium' ); ?>
-									</a>
-									</div>
-									<div class="col-md-10">
-										<a href="<?php echo $profileurl; ?>"><h4><?php echo $full_name; ?></h4></a>
-											<p><?php echo ( rwmb_meta('physician_short_clinical_bio', $physician->ID) ? rwmb_meta( 'physician_short_clinical_bio', $physician->ID) : wp_trim_words( rwmb_meta( 'physician_clinical_bio', $physician->ID ), 30, ' &hellip;' ) ); ?></p>
-					                            <a class="more" target="_self" title="View Profile" href="<?php echo $profileurl; ?>">View Profile</a>
-					                </div><!-- .col -->
-					           </div><!-- .row -->
-							<?php endwhile;
-								wp_reset_postdata(); ?>
-							</div>
-						<?php endif; ?>
-
+		    	
+					<?php endif; ?>
 		    <?php endwhile; // end of the loop. ?>
 			    	</div><!-- .col -->
 			   </div><!-- .row -->

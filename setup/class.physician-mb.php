@@ -26,10 +26,12 @@ if($wpdb->get_var("SHOW TABLES LIKE '{$wpdb->prefix}uams_locations'") != "{$wpdb
           'location_zip'   => 'VARCHAR(10) NOT NULL',
           'location_map'   => 'TEXT NOT NULL',
           'location_phone'   => 'VARCHAR(30) NOT NULL',
+          'location_appointments'   => 'VARCHAR(255) NOT NULL',
           'location_fax'   => 'VARCHAR(30) NOT NULL',
           'location_email'   => 'VARCHAR(100) NOT NULL',
           'location_web_name'   => 'VARCHAR(50) NOT NULL',
           'location_url'   => 'VARCHAR(100) NOT NULL',
+          'location_hours'   => 'TEXT NOT NULL',
       ) );
   }
 }
@@ -167,6 +169,18 @@ function uams_physicians_register_meta_boxes( $meta_boxes ) {
           'type' => 'text',
           'name' => 'Fax',
         ),
+
+        array (
+          'id' => 'location_appointments',
+          'type' => 'wysiwyg',
+          'name' => 'Appointments Phone',
+          'raw' => false,
+          'options' => array(
+            'textarea_rows' => 3,
+            'media_buttons' => false,
+            'teeny'         => true,
+          ),
+        ),
          
         array (
           'id' => 'location_email',
@@ -184,6 +198,17 @@ function uams_physicians_register_meta_boxes( $meta_boxes ) {
           'id' => 'location_url',
           'type' => 'url',
           'name' => 'URL',
+        ),
+
+        array (
+          'id' => 'location_hours',
+          'type' => 'wysiwyg',
+          'name' => 'Hours of Operation',
+          'options' => array(
+            'textarea_rows' => 3,
+            'media_buttons' => false,
+            'teeny'         => true,
+          ),
         ),
       ),
       'validation' => array(

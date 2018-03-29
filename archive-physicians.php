@@ -57,12 +57,22 @@
 														<div class="fwp-filter">[facetwp facet="patient_types"]</div>
 														<div class="fwp-filter">[facetwp facet="physician_gender"]</div>
 														<div class="fwp-filter">[facetwp facet="physician_language"]</div>
-														<div class="fwp-filter">[facetwp facet="alpha"]</div>
+														<!--<div class="fwp-filter">[facetwp facet="alpha"]</div>-->
 														<button onclick="FWP.reset()">Reset</button>
 														[/section]
 													[/accordion]' ); ?>
 		        	</div>
 					<div class="col-md-8 people">
+						<?php echo facetwp_display( 'facet', 'alpha' ); ?>
+						<div class="row">
+				        	<div class="col-md-8 text-center">
+								<?php echo facetwp_display( 'counts' ); ?>
+							</div>
+				        	<div class="col-md-4 text-right">
+								<?php echo facetwp_display( 'sort' ); ?>
+							</div>
+						</div>
+						<hr>
 						<?php echo facetwp_display( 'template', 'physician' ); ?>
 						<?php //get_template_part( 'templates/physician-loop' ); ?>
 						<?php //echo facetwp_display( 'pager' ); ?>
