@@ -66,7 +66,7 @@
 						<?php echo facetwp_display( 'facet', 'alpha' ); ?>
 						<div class="row">
 				        	<div class="col-md-8 text-center">
-								<?php echo facetwp_display( 'counts' ); ?>
+								<?php echo facetwp_display( 'counts' ); ?> Doctors
 							</div>
 				        	<div class="col-md-4 text-right">
 								<?php echo facetwp_display( 'sort' ); ?>
@@ -77,6 +77,7 @@
 						<?php //get_template_part( 'templates/physician-loop' ); ?>
 						<?php //echo facetwp_display( 'pager' ); ?>
 						<?php //echo do_shortcode('[facetwp load_more="true" label="Load more"]'); ?>
+
 					</div><!-- .col -->
 				</div><!-- .row -->
 

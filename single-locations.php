@@ -20,21 +20,6 @@
 		  ?>
 
 	      <div id='main_content' class="uams-body-copy" tabindex="-1">
-		      		   <style type="text/css">
-
-			.acf-map {
-				width: 100%;
-				height: 400px;
-				border: #ccc solid 1px;
-				margin: 20px 0;
-			}
-
-			/* fixes potential theme css conflict */
-			.acf-map img {
-			   max-width: inherit !important;
-			}
-
-			</style>
 			<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 			<script type="text/javascript">
 			(function($) {
@@ -209,7 +194,7 @@
 			})(jQuery);
 			</script>
 
-		    <div style="margin-bottom: 10px; max-width: 450px;"><?php echo do_shortcode( '[wpdreams_ajaxsearchpro id=1]' ); ?></div>
+		    <div class="mb10 search-box-lg"><?php echo do_shortcode( '[wpdreams_ajaxsearchpro id=1]' ); ?></div>
 		    <?php while ( have_posts() ) : the_post(); ?>	    	
 		    	<div class="row">
 			    	<div class="col-md-6">
@@ -228,7 +213,7 @@
 					        <?php echo ( rwmb_meta('location_appointments', $args ) ? '<h3>Appointments</h3><p>' . rwmb_meta('location_appointments', $args) . '</p>' : ''); ?>
 					        <?php echo ( rwmb_meta('location_hours', $args ) ? '<h3>Hours of Operation</h3><p>' . rwmb_meta('location_hours', $args) . '</p>' : ''); ?>	
 			    	</div>
-			    	<div class="col-md-6">
+			    	<div class="col-md-6" class="mt32">
 			    		<?php if ( has_post_thumbnail() ) { ?>
 					            	<p>
 								    <?php the_post_thumbnail('medium-large', ['class' => 'img-responsive']); ?>
@@ -242,9 +227,26 @@
 							</div>
 		    	
 					<?php endif; ?>
+					</div><!-- .col -->
+			   	</div><!-- .row -->
+			   	<?php $specialties = rwmb_meta('medical_specialties');
+			   		if( $specialties ): 
+			   		$specialtiescols = partition( $specialties, 3 ); ?>
+					<h3>Specialties at this Location</h3>
+					<div class="row">
+						<?php for ( $i = 0 ; $i < 3 ; $i++ ) { ?>
+			    		<div class="col-md-4">
+						<?php
+						 	foreach( $specialtiescols[$i] as $specialty ):
+							 $specialty_name = get_term( $specialty, 'specialty');
+								echo $specialty_name->name . '<br/>';
+						 	endforeach; ?>     	
+			    		</div>
+			    		<?php } // endfor?>
+			    	</div>
+			    <?php endif; ?>
 		    <?php endwhile; // end of the loop. ?>
-			    	</div><!-- .col -->
-			   </div><!-- .row -->
+			    	
 		</div>
 <?php wp_reset_query(); ?>
 	</div>
@@ -256,3 +258,20 @@
 </div>
 
 <?php get_footer(); ?>
+
+<?php
+
+function partition( $list, $p ) {
+    $listlen = count( $list );
+    $partlen = floor( $listlen / $p );
+    $partrem = $listlen % $p;
+    $partition = array();
+    $mark = 0;
+    for ($px = 0; $px < $p; $px++) {
+        $incr = ($px < $partrem) ? $partlen + 1 : $partlen;
+        $partition[$px] = array_slice( $list, $mark, $incr );
+        $mark += $incr;
+    }
+    return $partition;
+}
+?>

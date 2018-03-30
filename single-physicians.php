@@ -29,22 +29,6 @@
 		  ?>
 
 	      <div id='main_content' class="uams-body-copy" tabindex="-1">
-	      	
-	      	<style type="text/css">
-
-			.acf-map {
-				width: 100%;
-				height: 400px;
-				border: #ccc solid 1px;
-				margin: 20px 0;
-			}
-
-			/* fixes potential theme css conflict */
-			.acf-map img {
-			   max-width: inherit !important;
-			}
-
-			</style>
 			<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDyLHe_sPO96k-dsBtTR69iEDQlgpIJOIg&v=3.exp&sensor=false"></script>
 			<script type="text/javascript">
 			(function($) {
@@ -237,21 +221,21 @@
 			})(jQuery);
 			</script>
 <!-- 			<h2>Physician</h2> -->
-			<div style="margin-bottom: 10px; max-width: 450px;"><?php echo do_shortcode( '[wpdreams_ajaxsearchpro id=1]' ); ?></div>
+			<div class="mb10 search-box-lg"><?php echo do_shortcode( '[wpdreams_ajaxsearchpro id=1]' ); ?></div>
 	        <div class="row">
 		        <div class="col-md-8">
 	                <h1 class="title-heading-left" data-fontsize="34" data-lineheight="48"><?php echo rwmb_meta('physician_first_name'); ?> <?php echo (rwmb_meta('physician_middle_name') ? rwmb_meta('physician_middle_name') : ''); ?> <?php echo rwmb_meta('physician_last_name'); ?><?php echo (rwmb_meta('physician_degree') ? ', ' . rwmb_meta('physician_degree') : ''); ?></h1>
 	                    <?php echo (rwmb_meta('physician_title') ? '<h4>' . rwmb_meta('physician_title') .'</h4>' : ''); ?>
 	            </div>
-				<div class="col-md-4" style="padding-top: 42px;">
-	                <div class="fusion-button-wrapper">
+				<div class="col-md-4" class="mb32">
+	                <div>
 	                    <a class="uams-btn btn-lg" target="_self" title="Make an Appointment" href="<?php echo rwmb_meta('physician_appointment_link'); ?>">Make an Appointment</a>
 	                </div>
 	            </div>
 	        </div>
 			<div class="row">
 				<div class="col-md-3">
-	                <div style="padding-bottom: 1em;">
+	                <div class="mb20">
 	                    <?php the_post_thumbnail( 'medium' ); ?>
 	                </div>
 <?php if(rwmb_meta('physician_youtube_link')) { ?>
@@ -259,16 +243,12 @@
 	                    <a class="uams-btn btn-red btn-play btn-md" target="_self" title="Watch Video" href="<?php echo rwmb_meta('physician_youtube_link'); ?>">Watch Video</a>
 	                </div>
 <?php } ?>
-	                <div class="fusion-button-wrapper">
+	                <div>
 	                    <a class="uams-btn btn-blue btn-plus btn-md" target="_self" title="Visit MyChart" href="https://mychart.uamshealth.com/">MyChart</a>
 	                </div>
 	                <?php if(rwmb_meta('physician_npi')) { ?>
 					<div class="ds-summary" data-ds-id="<?php echo rwmb_meta( 'physician_npi' ); ?>"></div>
-					<?php } ?>
-	                <div class="fusion-sep-clear"></div>
-
-	                <div class="fusion-separator fusion-full-width-sep sep-single" style="border-color:#e0dede;border-top-width:1px;margin-left: auto;margin-right: auto;margin-top:10px;margin-bottom:10px;"></div>
-						<?php
+					<?php }
 
 						$locations = new WP_Query( array(
 						    'relationship' => array(
@@ -278,8 +258,7 @@
 						    'nopaging'     => true,
 						) );
 						
-						?>
-						<?php if( $locations ): ?>
+						if( $locations ): ?>
 						<h3 data-fontsize="16" data-lineheight="24"><i class="fa fa-medkit"></i> Clinic(s)</h3>
 							<ul>
 							<?php while ( $locations->have_posts() ) : $locations->the_post(); ?>

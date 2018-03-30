@@ -210,6 +210,19 @@ function uams_physicians_register_meta_boxes( $meta_boxes ) {
             'teeny'         => true,
           ),
         ),
+
+        array (
+          'id' => 'medical_specialties',
+          'type' => 'taxonomy',
+          'name' => 'Medical Specialties Offered',
+          'taxonomy' => 'specialty',
+          'field_type' => 'select_advanced',
+          'placeholder' => 'Select an Item',
+          'multiple'    => true,
+          'js_options'      => array(
+            'width' => '100%',
+          ),
+        ),
       ),
       'validation' => array(
 		    'rules'  => array(

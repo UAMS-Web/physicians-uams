@@ -10,30 +10,31 @@
 	<?php $full_name = rwmb_meta('physician_first_name') .' ' .(rwmb_meta('physician_middle_name') ? rwmb_meta('physician_middle_name') . ' ' : '') . rwmb_meta('physician_last_name') . (rwmb_meta('physician_degree') ? ', ' . rwmb_meta('physician_degree') : '');
 	      //$profileurl = '/directory/physician/' . $post->post_name .'/';
 	?>
-	<div class="<?php echo $class; ?>" style="border:1px solid #ececec;padding:10px; margin-bottom: 10px;">
+	<div class="<?php echo $class; ?> archive-box">
 	    <div class="row">
-	        <div class="col-md-12"><a href="<?php echo get_permalink($post->ID); ?>"><h2 style="margin-top: 0;"><?php echo $full_name; ?></h2></a></div>
+	        <div class="col-md-12"><a href="<?php echo get_permalink($post->ID); ?>"><h2 class="mt0"><?php echo $full_name; ?></h2></a></div>
 		</div>
 		<div class="row">
-	        <div class="col-md-3" style="margin-top:0px;margin-bottom:20px;">
-	            <div style="padding-bottom: 1em;">
-	            	<span style="-moz-box-shadow: 0 0 3px rgba(0,0,0,.3);-webkit-box-shadow: 0 0 3px rgba(0,0,0,.3);box-shadow: 0 0 3px rgba(0,0,0,.3);"><a href="<?php echo get_permalink($post->ID); ?>" target="_self"><?php the_post_thumbnail( 'medium' ); ?></a></span>
+	        <div class="col-md-3" class="mt0 mb20">
+	            <div class="mb20">
+	            	<span><a href="<?php echo get_permalink($post->ID); ?>" target="_self"><?php the_post_thumbnail( 'medium' ); ?></a></span>
 	            </div>
-	            <a class="uams-btn btn-blue btn-sm" target="_self" title="View Profile" href="<?php echo get_permalink($post->ID); ?>">View Profile</a>
-				<?php if(rwmb_meta('physician_youtube_link')) { ?>
-	            <a class="uams-btn btn-red btn-play btn-sm" target="_self" title="View Physician Video" href="<?php echo rwmb_meta('physician_youtube_link'); ?>">View Video</a>
-				<?php } ?>
+				
 				<?php if(rwmb_meta('physician_npi')) { ?>
 				<div class="ds-summary" data-ds-id="<?php echo rwmb_meta( 'physician_npi' ); ?>"></div>
 				<?php } ?>
 	        </div>
-	        <div class="col-md-9" style="margin-top:0px;margin-bottom:0px;">
-	                <div class="row" style="margin-top:0px;margin-bottom:0px;">
+	        <div class="col-md-9" class="mt0 mb0">
+	                <div class="row" class="mt0 mb0">
 	                    <div class="col-md-6">
 
 	                        <p><?php echo ( rwmb_meta('physician_short_clinical_bio') ? rwmb_meta( 'physician_short_clinical_bio') : wp_trim_words( rwmb_meta( 'physician_clinical_bio' ), 30, ' &hellip;' ) ); ?></p>
-	                        <a class="more" target="_self" title="View Profile" href="<?php echo $profileurl; ?>">View Profile</a>
 
+	                         <a class="uams-btn btn-blue btn-sm" target="_self" title="View Profile" href="<?php echo get_permalink($post->ID); ?>">View Profile</a>
+	                        <!-- <a class="more" target="_self" title="View Profile" href="<?php echo $profileurl; ?>">View Profile</a> -->
+							<?php if(rwmb_meta('physician_youtube_link')) { ?>
+								<a class="uams-btn btn-red btn-play btn-sm" target="_self" title="View Physician Video" href="<?php echo rwmb_meta('physician_youtube_link'); ?>">View Video</a>
+							<?php } ?>
 	                        <p></p>
 
 	                    </div>
@@ -89,11 +90,7 @@
 	    </div><!-- .row -->
 	</div><!-- .color -->
 	<?php $i++; ?>
-	<?php endwhile; else : ?>
-	<?php  ?>
-	<p><?php _e( 'Sorry, no physicians matched your criteria.' ); ?></p>
-	<?php endif; ?>
-	<?php if(rwmb_meta('physician_npi')) { ?>
+	<?php endwhile; ?>
 	<script src="https://www.docscores.com/widget/v2/uams/npi/lotw.js" async></script>
 	<script>
 		(function ($, window) {
@@ -171,4 +168,6 @@
 		});
 	})(jQuery);
 	</script>
-	<?php } ?>
+	<?php else : ?>
+	<p><?php _e( 'Sorry, no physicians matched your criteria.' ); ?></p>
+	<?php endif; ?>

@@ -358,28 +358,34 @@ add_action( 'wp_head', 'fwp_load_more', 99 );
 
 // FacetWP Sort
 add_filter( 'facetwp_sort_options', function( $options, $params ) {
-	$params = array(
-	    'template_name' => 'physicians', 
-	);
-    $options['name_asc'] = array(
-        'label' => __( 'Name (A-Z)', 'fwp' ),
-        'query_args' => array(
-            'orderby' => 'meta_value',
-			'meta_key' => 'physician_full_name_meta',
-			'order' => 'ASC',
-        )
-    );
-    $options['name_desc'] = array(
-        'label' => __( 'Name (Z-A)', 'fwp' ),
-        'query_args' => array(
-            'orderby' => 'meta_value',
-			'meta_key' => 'physician_full_name_meta',
-            'order' => 'DESC',
-        )
-    );
+	if ( is_post_type_archive( 'physicians' ) || is_singular( 'physicians' ) ) {
+		$params = array(
+		    'template_name' => 'physicians', 
+		);
+	    $options['name_asc'] = array(
+	        'label' => __( 'Name (A-Z)', 'fwp' ),
+	        'query_args' => array(
+	            'orderby' => 'meta_value',
+				'meta_key' => 'physician_full_name_meta',
+				'order' => 'ASC',
+	        )
+	    );
+	    $options['name_desc'] = array(
+	        'label' => __( 'Name (Z-A)', 'fwp' ),
+	        'query_args' => array(
+	            'orderby' => 'meta_value',
+				'meta_key' => 'physician_full_name_meta',
+	            'order' => 'DESC',
+	        )
+	    );
+	    unset( $options['title_asc'] );
+     	unset( $options['title_desc'] );
+	 } elseif ( is_post_type_archive( 'locations' ) || is_singular( 'locations' ) ) {
+	 	$params = array(
+		    'template_name' => 'locations', 
+		);
+	 }
     //);
-     unset( $options['title_asc'] );
-     unset( $options['title_desc'] );
      unset( $options['date_desc'] );
      unset( $options['date_asc'] );
     return $options;
@@ -387,6 +393,12 @@ add_filter( 'facetwp_sort_options', function( $options, $params ) {
 
 //FacetWP Count
 add_filter( 'facetwp_result_count', function( $output, $params ) {
-    $output = $params['total'] . ( $params['total'] > 1 ? ' Doctors' : ' Doctor' );
+	// if ( is_post_type_archive( 'physicians' ) || is_singular( 'physicians' ) ) {
+ //    	$output = $params['total'] . ( $params['total'] > 1 ? ' Doctors' : ' Doctor' );
+ //    } elseif ( in_array( get_post_type(), array( 'locations' )) ) {//is_post_type_archive( 'locations' ) || is_singular( 'locations' ) ) {
+ //    	$output = $params['total'] . ( $params['total'] > 1 ? ' Locations' : ' Location' );
+ //    } else {
+    	$output = $params['total'];
+    // }
     return $output;
 }, 10, 2 );
