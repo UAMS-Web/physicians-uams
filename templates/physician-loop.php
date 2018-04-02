@@ -15,8 +15,8 @@
 	        <div class="col-md-12"><a href="<?php echo get_permalink($post->ID); ?>"><h2 class="mt0"><?php echo $full_name; ?></h2></a></div>
 		</div>
 		<div class="row">
-	        <div class="col-md-3" class="mt0 mb20">
-	            <div class="mb20">
+	        <div class="col-md-3" class="margin-top-none margin-bottom-two">
+	            <div class="margin-bottom-two">
 	            	<span><a href="<?php echo get_permalink($post->ID); ?>" target="_self"><?php the_post_thumbnail( 'medium' ); ?></a></span>
 	            </div>
 				
@@ -24,8 +24,8 @@
 				<div class="ds-summary" data-ds-id="<?php echo rwmb_meta( 'physician_npi' ); ?>"></div>
 				<?php } ?>
 	        </div>
-	        <div class="col-md-9" class="mt0 mb0">
-	                <div class="row" class="mt0 mb0">
+	        <div class="col-md-9" class="margin-top-none margin-bottom-none">
+	                <div class="row" class="margin-top-none margin-bottom-none">
 	                    <div class="col-md-6">
 
 	                        <p><?php echo ( rwmb_meta('physician_short_clinical_bio') ? rwmb_meta( 'physician_short_clinical_bio') : wp_trim_words( rwmb_meta( 'physician_clinical_bio' ), 30, ' &hellip;' ) ); ?></p>

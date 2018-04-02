@@ -10,7 +10,7 @@
 					</p>
 				<?php } ?>
 	    	</div>
-	    	<div class="col-md-9" class="mt0 mb0">
+	    	<div class="col-md-9" class="margin-top-none margin-bottom-none">
 	    		<a href="<?php echo get_permalink(); ?>" target="_self"><h2><?php the_title(); ?></h2></a>
 				<?php $map = rwmb_get_value('location_map'); ?>
 		        <p><?php echo rwmb_meta('location_address_1', $args, get_the_ID() ); ?><br/>

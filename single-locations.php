@@ -194,7 +194,7 @@
 			})(jQuery);
 			</script>
 
-		    <div class="mb10 search-box-lg"><?php echo do_shortcode( '[wpdreams_ajaxsearchpro id=1]' ); ?></div>
+		    <div class="margin-bottom-one search-box-lg"><?php echo do_shortcode( '[wpdreams_ajaxsearchpro id=1]' ); ?></div>
 		    <?php while ( have_posts() ) : the_post(); ?>	    	
 		    	<div class="row">
 			    	<div class="col-md-6">
@@ -213,7 +213,7 @@
 					        <?php echo ( rwmb_meta('location_appointments', $args ) ? '<h3>Appointments</h3><p>' . rwmb_meta('location_appointments', $args) . '</p>' : ''); ?>
 					        <?php echo ( rwmb_meta('location_hours', $args ) ? '<h3>Hours of Operation</h3><p>' . rwmb_meta('location_hours', $args) . '</p>' : ''); ?>	
 			    	</div>
-			    	<div class="col-md-6" class="mt32">
+			    	<div class="col-md-6 margin-bottom-two">
 			    		<?php if ( has_post_thumbnail() ) { ?>
 					            	<p>
 								    <?php the_post_thumbnail('medium-large', ['class' => 'img-responsive']); ?>

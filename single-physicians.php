@@ -11,7 +11,6 @@
  ?>
 	<?php get_template_part( 'header', 'image' ); ?>
 
-	<!--<div class="col-md-12 mobile-menu"> <?php get_template_part( 'menu', 'mobile' ); ?> </div>-->
 	<div class="container uams-body">
 
 	  <div class="row">
@@ -220,14 +219,14 @@
 
 			})(jQuery);
 			</script>
-<!-- 			<h2>Physician</h2> -->
-			<div class="mb10 search-box-lg"><?php echo do_shortcode( '[wpdreams_ajaxsearchpro id=1]' ); ?></div>
+
+			<div class="margin-bottom-one search-box-lg"><?php echo do_shortcode( '[wpdreams_ajaxsearchpro id=1]' ); ?></div>
 	        <div class="row">
 		        <div class="col-md-8">
 	                <h1 class="title-heading-left" data-fontsize="34" data-lineheight="48"><?php echo rwmb_meta('physician_first_name'); ?> <?php echo (rwmb_meta('physician_middle_name') ? rwmb_meta('physician_middle_name') : ''); ?> <?php echo rwmb_meta('physician_last_name'); ?><?php echo (rwmb_meta('physician_degree') ? ', ' . rwmb_meta('physician_degree') : ''); ?></h1>
 	                    <?php echo (rwmb_meta('physician_title') ? '<h4>' . rwmb_meta('physician_title') .'</h4>' : ''); ?>
 	            </div>
-				<div class="col-md-4" class="mb32">
+				<div class="col-md-4 margin-bottom-two">
 	                <div>
 	                    <a class="uams-btn btn-lg" target="_self" title="Make an Appointment" href="<?php echo rwmb_meta('physician_appointment_link'); ?>">Make an Appointment</a>
 	                </div>
@@ -235,7 +234,7 @@
 	        </div>
 			<div class="row">
 				<div class="col-md-3">
-	                <div class="mb20">
+	                <div class="margin-bottom-two">
 	                    <?php the_post_thumbnail( 'medium' ); ?>
 	                </div>
 <?php if(rwmb_meta('physician_youtube_link')) { ?>

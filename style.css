@@ -19,8 +19,10 @@ Version: 1.0
 } 
 .whiteBackground { background-color: #fff; }
 .grayBackground { background-color: #fafafa; }
-.college-filter,
-.department-filter {
+.specialty-filter,
+.condition-filter,
+.terms-filter,
+.procedures-filter {
 	display:none !important;
 }
 .facetwp__loader button {
@@ -38,25 +40,6 @@ Version: 1.0
 	-moz-box-shadow: 0 0 3px rgba(0,0,0,.3);
 	-webkit-box-shadow: 0 0 3px rgba(0,0,0,.3);
 	box-shadow: 0 0 3px rgba(0,0,0,.3);
-}
-/* Margin Helper classes */
-.mt0 {
-	margin-top: 0px;
-}
-.mt10 {
-	margin-top: 10px;
-}
-.mt32 { /* H1 Margin Top */
-	margin-top: 32px;
-}
-.mb0 {
-	margin-bottom: 0px;
-}
-.mb10 {
-	margin-bottom: 10px;
-}
-.mb20 {
-	margin-bottom: 20px;
 }
 .acf-map {
 	width: 100%;
