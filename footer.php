@@ -23,10 +23,12 @@
                 <li><a href="http://uamshealth.com/termsofuse/">Terms</a></li>
             </ul>
         </nav>
+        <?php if ( has_nav_menu( 'nondiscrimination-menu' ) ) { ?>
         <nav class="nondiscrimination-menu" role="navigation" aria-label="<?php _e( 'Non-discrimination Notice', 'textdomain' ); ?>">
         <h5>Non-discrimination Notice</h5>
         <?php wp_nav_menu( array( 'theme_location' => 'nondiscrimination-menu', 'container' => false, 'menu_class' => 'nondiscrimination-links' ) ); ?>
         </nav>
+        <?php } ?>
 
         <p>&copy; <?php echo date("Y"); ?> University of Arkansas for Medical Sciences  |  Little Rock, AR</p>
 
