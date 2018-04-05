@@ -7,6 +7,56 @@ Author URI: http://uams.edu
 Template: uams-2016
 Version: 1.0
  */
+ .uams-primary .uams-thinstrip .uams-patch {
+	background-size: 290px;
+	width: 300px;
+	height: 100px;
+ }
+.uams-primary .uams-thinstrip .uams-patch:focus,
+.uams-primary .uams-thinstrip .uams-patch:hover {
+	background-size: 290px;
+}
+.uams-thinstrip {
+	z-index: 6;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+.uams-thinstrip .uams-patch {
+	background: url(assets/svg/uamshealth-sprite.svg) no-repeat 5px 3px #9d2235;
+}
+.uams-thinstrip .uams-patch:focus,
+.uams-thinstrip .uams-patch:hover {
+	background-image: url(assets/svg/uamshealth-sprite-focus.svg);
+	background-position-x: 5px;
+	background-position-y: 3px;
+}
+.uams-thinstrip .uams-patch:before {
+	content: url(assets/svg/uamshealth-sprite-focus.svg);
+	display: none;
+}
+.uams-footer .nondiscrimination-menu h5 {
+	color: #fff;
+	font-weight: 600;
+	font-size: 18px;
+	margin-bottom: 6px;
+}
+.uams-footer ul.nondiscrimination-links li {
+	list-style: none;
+	display: inline-block;
+	font-size: 16px;
+}
+.uams-footer ul.nondiscrimination-links li a {
+    color: #fff;
+    position: relative;
+	margin-right: 20px;
+}
+.uams-footer ul.nondiscrimination-links li a:focus,
+.uams-footer ul.nondiscrimination-links li a:hover {
+    color: #eee;
+    text-decoration: none;
+	border-bottom: 1px dotted #eee;
+}
+/* Physicians */
 .rwmb-row {
     padding-bottom: 1em;
     border-bottom: 1px inset;
@@ -54,10 +104,123 @@ Version: 1.0
 .search-box-lg {
 	max-width: 450px;
 }
+
+/* Flexible Widgets
+--------------------------------------------- */
+
+.flexible-widgets {
+	padding-bottom: 60px;
+	padding-top: 100px;
+}
+
+.flexible-widgets.widget-area .widget {
+	float: left;
+	padding-left: 20px;
+	padding-right: 20px;
+	margin-bottom: 40px;
+}
+
+.flexible-widgets.widget-full .widget,
+.flexible-widgets.widget-halves.uneven .widget:last-of-type {
+	float: none;
+	width: 100%;
+}
+
+.flexible-widgets.widget-fourths .widget {
+	width: 25%;
+}
+background-size: 410px;
+.flexible-widgets.widget-halves .widget {
+	width: 50%;
+}
+
+.flexible-widgets.widget-thirds .widget {
+	width: 33.33%;
+}
+
+.flexible-widgets.widget-halves .widget:nth-child(odd),
+.flexible-widgets.widget-thirds .widget:nth-child(3n+1),
+.flexible-widgets.widget-fourths .widget:nth-child(4n+1) {
+	clear: left;
+}
+
+.flexible-widgets.widget-halves h2,
+.flexible-widgets.widget-thirds h2,
+.flexible-widgets.widget-fourths h2 {
+	font-size: 36px;
+}
+
+#footer-widgets {
+	color: #fff;
+	text-align: left;
+}
+#footer-widgets a {
+	color: #fff;
+	text-decoration: dotted underline;
+}
+#footer-widgets a:hover, #footer-widgets a:focus {
+	color: #eee;
+	text-decoration: underline;
+}
+#footer-widgets h2 {
+	margin-top: 12px;
+	margin-bottom: 6px;
+}
+#footer-widgets h3 {
+	font-size: 30px;
+}
+#footer-widgets h4 {
+	font-size: 24px;
+}
+#footer-widgets .widget_search #searchform #searchsubmit {
+	outline-color: #616161;
+	background-color: #616161;
+}
+#footer-widgets .widget-area {
+	padding-top: 50px;
+	padding-bottom: 0;
+}
+#footer-widgets .widget-area .widget {
+	margin-bottom: 20px;
+}
+#footer-widgets .shortcode-blogroll-mini svg path,
+#footer-widgets .widget_recent_entries svg path, 
+#footer-widgets .recent-posts-widget svg path, 
+#footer-widgets .uams-recent svg path, 
+#footer-widgets .uams-top-posts svg path, 
+#footer-widgets .uams-widget-related-posts svg path, 
+#footer-widgets .uams-widget-rss svg path {
+	fill: #bdbdbd;
+}
+.uams-footer .footer-wordmark {
+	margin-top: 25px;
+}
+.uams-footer ul.footer-links {
+	margin-top: 10px;
+}
 @media (max-width: 992px) {
 	.ds-summary {
 		margin-bottom: 10px;
 	    padding-bottom: 10px;
 	    border-bottom: 1px dotted #ccc;
+	}
+}
+@media only screen and (max-width: 991px) and (min-width: 769px) {
+
+	.flexible-widgets.widget-fourths .widget {
+		width: 50%;
+	}
+}
+@media only screen and (max-width: 768px) {
+	.flexible-widgets.widget-fourths .widget,
+	.flexible-widgets.widget-halves .widget,
+	.flexible-widgets.widget-thirds .widget {
+		float: none;
+		width: 100%;
+	}
+
+	.flexible-widgets .widget {
+		padding-left: 0;
+		padding-right: 0;
 	}
 }
