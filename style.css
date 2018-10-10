@@ -104,6 +104,18 @@ Version: 1.0
 .search-box-lg {
 	max-width: 450px;
 }
+/* Action Bar
+--------------------------------------------- */
+.full-bar .action-bar ul li a .icon {
+	height: 70px;
+    width: auto;
+    margin: 0 auto;
+    color: #bdbdbd;
+}
+.full-bar .action-bar ul li a .icon:focus,
+.full-bar .action-bar ul li a .icon:hover {
+	color: #9D2235;
+}
 
 /* Flexible Widgets
 --------------------------------------------- */
