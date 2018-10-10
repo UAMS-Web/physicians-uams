@@ -4,8 +4,41 @@
 // Fix ACF Support
 add_filter('_includes/acf-pro/settings/show_admin', '__return_true');
 
+require( 'setup/class.physicians.php' );
+require( 'setup/class.physician-custom-post.php' );
+//require( 'setup/class.physicians-acf.php' );
+require( 'setup/class.physician-mb.php' );
+require( 'setup/class.physicians-settings.php' );
+require( 'setup/class.uams-service-attributes-meta-box.php' );
+
+add_filter('body_class','uams_custom_body_class');
+function uams_custom_body_class( $classes ) {
+	global $post;
+	if ( rwmb_meta( 'action_menu', $post->ID ) )  {
+
+		$classes[] = 'action-bar';
+
+    }
+    if ( is_singular('services') && $post->post_parent > 0 ) {
+
+        $classes[] = 'page-child';
+
+    }
+
+    if ( get_children( 'post_type=services&post_parent='. $post->ID ) ) {
+
+        $classes[] = 'page-parent';
+
+    }
+        // Make sure uams-primary is selected
+		$classes[] = 'uams-primary';
+
+	// return the $classes array
+	return $classes;
+}
+
 function get_uams_breadcrumbs()
-  {
+{
 
     global $post;
     $ancestors = array_reverse( get_post_ancestors( $post->ID ) );
@@ -116,7 +149,50 @@ function get_uams_breadcrumbs()
     }
 
     return "<nav class='uams-breadcrumbs' aria-label='breadcrumbs'><ul>$html</ul></nav>";
-  }
+}
+function uams_services_menu()
+{
+  echo sprintf( '<nav id="desktop-relative" aria-label="mobile menu that is not visible in the desktop version">%s</nav>', uams_list_services() ) ;
+}
+function uams_services_menu_mobile()
+{
+echo sprintf( '<nav id="mobile-relative" aria-label="mobile menu">%s</nav>', uams_list_services() ) ;
+}
+function uams_list_services( $mobile = false )
+  {
+    global $UAMS;
+    global $post;
+
+    $parent = get_post( $post->post_parent );
+
+    if ( ! $mobile && ! get_children( array('post_parent' => $post->ID, 'post_status' => 'publish' ) ) && $parent->ID == $post->ID ) return;
+
+    $toggle = $mobile ? '<button class="uams-mobile-menu-toggle">Menu</button>' : '';
+    $class  = $mobile ? 'uams-mobile-menu' : 'uams-sidebar-menu';
+
+    $siblings = get_pages( array (
+      'parent'    => $parent->post_parent,
+      'post_type' => 'services',
+      'exclude'   => $parent->ID
+    ) );
+
+    $ids = !is_front_page() ? array_map( function($sibling) { return $sibling->ID; }, $siblings ) : array();
+
+    $pages = wp_list_pages(array(
+      'title_li'     => '<a href="'.get_bloginfo('url').'" title="Home" class="homelink">Home</a>',
+      'child_of'     => $parent->post_parent,
+      'exclude_tree' => $ids,
+      'depth'        => 3,
+      'echo'         => 0,
+      'post_type'    => 'services',
+      'walker'       => $UAMS->SidebarMenuWalker
+    ));
+
+    $bool = strpos($pages , 'child-page-existance-tester');
+
+    return  $bool && !is_search() ? sprintf( '%s<ul class="%s first-level">%s</ul>', $toggle, $class, $pages ) : '';
+
+  }         
 
 function register_uamshealth_menus() {
 	register_nav_menus(
@@ -127,6 +203,8 @@ function register_uamshealth_menus() {
 	);
 }
 add_action( 'init', 'register_uamshealth_menus' );
+
+
 
 register_sidebar( array(
 'name' => 'Footer Flex Widget',
@@ -204,11 +282,6 @@ function tsg_user_has_role( $role = '', $user = null )
 
     return;
 }
-
-require( 'setup/class.physicians.php' );
-require( 'setup/class.physician-custom-post.php' );
-//require( 'setup/class.physicians-acf.php' );
-require( 'setup/class.physician-mb.php' );
 
 // ACF User Role Filter - Disable Nag
 add_filter('remove_hube2_nag', '__return_true');
@@ -411,6 +484,27 @@ add_action( 'mb_relationships_init', function() {
                 'title'       => 'Physician(s)',
             ),
         ),
+    ),
+    array (
+		'id'	=> 'services_to_locations',
+		'from'	=> array(
+            'object_type' => 'post',
+            'post_type'   => 'services',
+            'meta_box'    => array(
+                'title'       => 'Location(s)',
+                'field_title' => 'Select Location',
+                'context' => 'normal',
+                'priority' => 'high',
+            ),
+        ),
+        'to'   => array(
+            'object_type' => 'post',
+            'post_type'   => 'locations',
+            'meta_box'    => array(
+                'hidden'	=> true,
+                'title'       => 'Service(s)',
+            ),
+		),
     ) );
 } );
 
@@ -603,3 +697,13 @@ add_filter( 'facetwp_result_count', function( $output, $params ) {
     // }
     return $output;
 }, 10, 2 );
+
+add_filter( 'rwmb_outside_conditions', function( $conditions ){
+    $conditions['#services_to_locations_relationships_to'] = array(
+		'hidden' => array(
+			array( 'post_type', 'services' ),
+			array( 'parent_id', '!=', '' )
+		)
+    );
+    return $conditions;
+} );

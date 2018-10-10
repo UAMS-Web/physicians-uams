@@ -1,6 +1,6 @@
 <?php
 
-	// Register 'Physicians' Custom Post Type
+// Register 'Physicians' Custom Post Type
 function physicians() {
 
 	$labels = array(
@@ -39,7 +39,7 @@ function physicians() {
 		'description'           => 'UAMS Physicians for Find-a-Doctor',
 		'labels'                => $labels,
 		'supports'              => array( 'title', 'author', 'thumbnail', ),
-		'taxonomies'            => array( 'specialties', 'department', 'patient_type', 'medical_procedures', 'medical_terms' ),
+		'taxonomies'            => array( 'specialties', 'department', 'patient_type', 'medical_procedures', 'medical_terms', 'conditions' ),
 		'hierarchical'          => false,
 		'public'                => true,
 		'show_ui'               => true,
@@ -102,7 +102,8 @@ function locations() {
 	$args = array(
 		'label'                 => 'Location',
 		'labels'                => $labels,
-		'supports'              => array( 'title', 'author', 'thumbnail', 'excerpt', ),
+		'supports'              => array( 'title', 'author', 'editor', 'thumbnail', ),
+		'taxonomies'            => array( 'specialties', 'medical_terms', 'conditions' ),
 		'hierarchical'          => false,
 		'public'                => true,
 		'show_ui'               => true,
@@ -125,6 +126,71 @@ function locations() {
 }
 add_action( 'init', 'locations', 0 );
 
+}
+if ( ! function_exists('services_cpt') ) {
+	// Register 'Services' Custom Post Type
+	function services_cpt() {
+
+		$labels = array(
+			'name'                  => 'Services',
+			'singular_name'         => 'Service',
+			'menu_name'             => 'Services',
+			'name_admin_bar'        => 'Service',
+			'archives'              => 'Service Archives',
+			'attributes'            => 'Service Attributes',
+			'parent_item_colon'     => 'Parent Item:',
+			'all_items'             => 'All Services',
+			'add_new_item'          => 'Add New Service',
+			'add_new'               => 'Add New',
+			'new_item'              => 'New Service',
+			'edit_item'             => 'Edit Service',
+			'update_item'           => 'Update Service',
+			'view_item'             => 'View Service',
+			'view_items'            => 'View Services',
+			'search_items'          => 'Search Services',
+			'uploaded_to_this_item' => 'Uploaded to this item',
+			'items_list'            => 'Services list',
+			'items_list_navigation' => 'Services list navigation',
+			'filter_items_list'     => 'Filter Services list',
+		);
+		$capabilities = array(
+			'edit_post'             => 'edit_service',
+			'read_post'             => 'read_service',
+			'delete_post'           => 'delete_service',
+			'edit_posts'            => 'edit_services',
+			'edit_others_posts'     => 'edit_others_services',
+			'publish_posts'         => 'publish_services',
+			'read_private_posts'    => 'read_private_services',
+		);
+		$args = array(
+			'label'                 => 'Service',
+			'description'           => 'UAMS Services',
+			'labels'                => $labels,
+			'supports'              => array( 'title', 'editor', 'thumbnail', 'excerpt', 'page-attributes', ),
+			'taxonomies'            => array( 'specialties', 'medical_terms', 'conditions' ),
+			'hierarchical'          => true,
+			'capability_type' 		=> 'page',
+			'public'                => true,
+			'show_ui'               => true,
+			'show_in_menu'          => true,
+			'menu_position'         => 20,
+			'menu_icon'             => get_stylesheet_directory_uri() .'/assets/admin-icons/services-icon.png',
+			'show_in_admin_bar'     => true,
+			'show_in_nav_menus'     => true,
+			'slug'					=> 'services',
+			'can_export'            => true,
+			'has_archive'           => true,
+			'exclude_from_search'   => false,
+			'publicly_queryable'    => true,
+			'capabilities'          => $capabilities,
+			'show_in_rest'          => true,
+			'rest_base'             => 'services',
+			'rest_controller_class' => 'WP_REST_Posts_Controller',
+		);
+		register_post_type( 'services', $args );
+
+	}
+	add_action( 'init', 'services_cpt', 0 );
 }
 
 //hook into the init action and call create_book_taxonomies when it fires
@@ -369,62 +435,68 @@ function create_patient_type_taxonomy() {
 	register_taxonomy( 'patient_type', array( 'physicians' ), $args );
 
 }
-// add_action( 'init', 'profile_type', 0 );
 
-// // Register Custom Taxonomy
-// function profile_type() {
+//hook into the init action and call create_book_taxonomies when it fires
+add_action( 'init', 'create_create_service_line_taxonomy', 0 );
 
-// 	$labels = array(
-// 		'name'                       => _x( 'Profile Types', 'Taxonomy General Name', 'text_domain' ),
-// 		'singular_name'              => _x( 'Profile Type', 'Taxonomy Singular Name', 'text_domain' ),
-// 		'menu_name'                  => __( 'Profile Type', 'text_domain' ),
-// 		'all_items'                  => __( 'All Profile Types', 'text_domain' ),
-// 		'parent_item'                => __( 'Parent Profile Type', 'text_domain' ),
-// 		'parent_item_colon'          => __( 'Parent Profile Type:', 'text_domain' ),
-// 		'new_item_name'              => __( 'New Profile Type', 'text_domain' ),
-// 		'add_new_item'               => __( 'Add New Profile Type', 'text_domain' ),
-// 		'edit_item'                  => __( 'Edit Profile Type', 'text_domain' ),
-// 		'update_item'                => __( 'Update Profile Type', 'text_domain' ),
-// 		'view_item'                  => __( 'View Profile Type', 'text_domain' ),
-// 		'separate_items_with_commas' => __( 'Separate items with commas', 'text_domain' ),
-// 		'add_or_remove_items'        => __( 'Add or remove items', 'text_domain' ),
-// 		'choose_from_most_used'      => __( 'Choose from the most used', 'text_domain' ),
-// 		'popular_items'              => __( 'Popular Items', 'text_domain' ),
-// 		'search_items'               => __( 'Search Items', 'text_domain' ),
-// 		'not_found'                  => __( 'Not Found', 'text_domain' ),
-// 		'no_terms'                   => __( 'No items', 'text_domain' ),
-// 		'items_list'                 => __( 'Items list', 'text_domain' ),
-// 		'items_list_navigation'      => __( 'Items list navigation', 'text_domain' ),
-// 	);
-// 	$rewrite = array(
-// 		'slug'                       => 'profile_type',
-// 		'with_front'                 => true,
-// 		'hierarchical'               => true,
-// 	);
-// 	$capabilities = array(
-// 		'manage_terms'               => 'manage_options',
-// 		'edit_terms'                 => 'manage_options',
-// 		'delete_terms'               => 'manage_options',
-// 		'assign_terms'               => 'edit_physicians',
-// 	);
-// 	$args = array(
-// 		'labels'                     => $labels,
-// 		'hierarchical'               => true,
-// 		'public'                     => true,
-// 		'show_ui'                    => true, //make true to add another
-// 		'show_admin_column'          => true,
-// 		'meta_box_cb' 				 => false,
-// 		'show_in_nav_menus'          => false,
-// 		'show_tagcloud'              => false,
-// // 		'rewrite'                    => array( 'slug' => '%profile_type%' ),
-// 		'capabilities'               => $capabilities,
-// 		'show_in_rest'               => true,
-// 		'rest_base'                  => 'profile_type',
-// 		'rest_controller_class'      => 'WP_REST_Terms_Controller',
-// 	);
-// 	register_taxonomy( 'profile_type', array( 'physicians' ), $args );
+//create a custom taxonomy name it topics for your posts
+function create_create_service_line_taxonomy() {
 
-// }
+// Add new taxonomy, make it hierarchical like categories
+// first do the translations part for GUI
+
+  $labels = array(
+		'name'                           => 'Service Lines',
+		'singular_name'                  => 'Service Line',
+		'search_items'                   => 'Search Service Lines',
+		'all_items'                      => 'All Service Lines',
+		'edit_item'                      => 'Edit Service Line',
+		'update_item'                    => 'Update Service Line',
+		'add_new_item'                   => 'Add New Service Line',
+		'new_item_name'                  => 'New Service Line',
+		'menu_name'                      => 'Service Lines',
+		'view_item'                      => 'View Service Line',
+		'popular_items'                  => 'Popular Service Line',
+		'separate_items_with_commas'     => 'Separate service lines with commas',
+		'add_or_remove_items'            => 'Add or remove Service Lines',
+		'choose_from_most_used'          => 'Choose from the most used service lines',
+		'not_found'                      => 'No Service Lines found',
+		'parent_item'                	 => 'Parent Service Line',
+		'parent_item_colon'          	 => 'Parent Service Line:',
+		'no_terms'                   	 => 'No Medical Service Lines',
+		'items_list'                 	 => 'Medical Service Lines list',
+		'items_list_navigation'      	 => 'Medical Service Lines list navigation',
+	);
+  	$rewrite = array(
+		'slug'                       => 'service-line',
+		'with_front'                 => true,
+		'hierarchical'               => true,
+	);
+	$capabilities = array(
+		'manage_terms'               => 'manage_options',
+		'edit_terms'                 => 'manage_options',
+		'delete_terms'               => 'manage_options',
+		'assign_terms'               => 'edit_physicians',
+	);
+	$args = array(
+		'label' 					 => __( 'Service Lines' ),
+		'labels'                     => $labels,
+		'hierarchical'               => true,
+		'public'                     => true,
+		'show_ui'                    => true,
+		'meta_box_cb'				 => false,
+		'show_admin_column'          => false,
+		'show_in_nav_menus'          => false,
+		'show_tagcloud'              => false,
+		'rewrite'                    => $rewrite,
+		'capabilities'               => $capabilities,
+		'show_in_rest'       		 => true,
+  		'rest_base'          		 => 'service_line',
+  		'rest_controller_class' 	 => 'WP_REST_Terms_Controller',
+	);
+	register_taxonomy( 'service-line', array( 'services', 'locations' ), $args );
+
+}
 
 //hook into the init action and call create_medical_procedures_taxonomy when it fires
 add_action( 'init', 'create_medical_procedures_taxonomy', 0 );
@@ -952,6 +1024,13 @@ function add_theme_caps() {
 	$role->add_cap( 'edit_others_locations');
 	$role->add_cap( 'publish_locations');
 	$role->add_cap( 'read_private_locations');
+	$role->add_cap( 'edit_service');
+	$role->add_cap( 'read_service');
+	$role->add_cap( 'delete_service');
+	$role->add_cap( 'edit_services');
+	$role->add_cap( 'edit_others_services');
+	$role->add_cap( 'publish_services');
+	$role->add_cap( 'read_private_services');
 }
 add_action( 'admin_init', 'add_theme_caps');
 
@@ -994,7 +1073,7 @@ function acf_hide_title() {
  * @param 		object 		$labels 		Current post type labels
  * @return 		object 					Modified post type labels
  */
-function change_featured_image_labels( $labels ) {
+function change_featured_image_labels_physician( $labels ) {
 
 	$labels->featured_image 	= 'Headshot';
 	$labels->set_featured_image 	= 'Set headshot';
@@ -1005,7 +1084,8 @@ function change_featured_image_labels( $labels ) {
 
 } // change_featured_image_labels()
 
-add_filter( 'post_type_labels_physicians', 'change_featured_image_labels', 10, 1 );
+add_filter( 'post_type_labels_physicians', 'change_featured_image_labels_physician', 10, 1 );
+
 
 /**
  * Add REST API support to Teams Meta.

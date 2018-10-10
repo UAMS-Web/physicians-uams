@@ -211,7 +211,14 @@
 					            <p><a class="uams-btn btn-red btn-sm btn-external" href="https://www.google.com/maps/dir/Current+Location/<?php echo $map['latitude'] ?>,<?php echo $map['longitude'] ?>" target="_blank">Get Directions</a>
 					        </p>
 					        <?php echo ( rwmb_meta('location_appointments', $args ) ? '<h3>Appointments</h3><p>' . rwmb_meta('location_appointments', $args) . '</p>' : ''); ?>
-					        <?php echo ( rwmb_meta('location_hours', $args ) ? '<h3>Hours of Operation</h3><p>' . rwmb_meta('location_hours', $args) . '</p>' : ''); ?>	
+							<h3>Hours of Operation</h3>
+					        <?php echo ( rwmb_meta('location_mon_open', $args ) ? '<p>Mon: ' . rwmb_meta('location_mon_open', $args) . ' - ' . rwmb_meta('location_mon_close', $args) . '</p>' : ''); ?>
+							<?php echo ( rwmb_meta('location_tues_open', $args ) ? '<p>Tues: ' . rwmb_meta('location_tues_open', $args) . ' - ' . rwmb_meta('location_tues_close', $args) . '</p>' : ''); ?>	
+							<?php echo ( rwmb_meta('location_wed_open', $args ) ? '<p>Wed: ' . rwmb_meta('location_wed_open', $args) . ' - ' . rwmb_meta('location_wed_close', $args) . '</p>' : ''); ?>	
+							<?php echo ( rwmb_meta('location_thurs_open', $args ) ? '<p>Thur: ' . rwmb_meta('location_thurs_open', $args) . ' - ' . rwmb_meta('location_thurs_close', $args) . '</p>' : ''); ?>	
+							<?php echo ( rwmb_meta('location_fri_open', $args ) ? '<p>Fri: ' . rwmb_meta('location_fri_open', $args) . ' - ' . rwmb_meta('location_fri_close', $args) . '</p>' : ''); ?>	
+							<?php echo ( rwmb_meta('location_sat_open', $args ) ? '<p>Sat: ' . rwmb_meta('location_sat_open', $args) . ' - ' . rwmb_meta('location_sat_close', $args) . '</p>' : ''); ?>	
+							<?php echo ( rwmb_meta('location_sun_open', $args ) ? '<p>Sun: ' . rwmb_meta('location_sun_open', $args) . ' - ' . rwmb_meta('location_sunn_close', $args) . '</p>' : ''); ?>	
 			    	</div>
 			    	<div class="col-md-6 margin-bottom-two">
 			    		<?php if ( has_post_thumbnail() ) { ?>
