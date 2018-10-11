@@ -7,11 +7,7 @@
 
 	get_header();
    $sidebar = get_post_meta($post->ID, "sidebar");
-   $breadcrumbs = get_post_meta($post->ID, "breadcrumb");
-?>
-
-<?php// get_template_part( 'header', 'image' ); ?>
-<?php 
+   $breadcrumbs = get_post_meta($post->ID, "breadcrumb"); 
 
 	$images = rwmb_meta( 'service_header_image', array( 'limit' => 1 ) );
 	$image = reset( $images );

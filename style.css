@@ -34,6 +34,10 @@ Version: 1.0
 	content: url(assets/svg/uamshealth-sprite-focus.svg);
 	display: none;
 }
+.uams-thinstrip button.uams-emergency {
+	background: transparent;
+	color: #9D2235;
+}
 .uams-footer .nondiscrimination-menu h5 {
 	color: #fff;
 	font-weight: 600;
@@ -218,12 +222,31 @@ background-size: 410px;
 	}
 }
 @media only screen and (max-width: 991px) and (min-width: 769px) {
-
+	.uams-thinstrip div.align-right {
+		width: 360px;
+	}
+	.uams-thinstrip nav {
+		float: right;
+	}
 	.flexible-widgets.widget-fourths .widget {
 		width: 50%;
 	}
 }
 @media only screen and (max-width: 768px) {
+	.uams-primary .uams-thinstrip .uams-patch {
+		width: 180px;
+		height: 60px;
+		background-size: 170px;
+	}
+	.uams-thinstrip button.uams-emergency {
+		top: 6px;
+		right: 95px;
+		height: 50px;
+		width: 50px;
+		margin-right: 15px;
+		overflow: hidden;
+		position: absolute;
+	}
 	.flexible-widgets.widget-fourths .widget,
 	.flexible-widgets.widget-halves .widget,
 	.flexible-widgets.widget-thirds .widget {
@@ -234,5 +257,10 @@ background-size: 410px;
 	.flexible-widgets .widget {
 		padding-left: 0;
 		padding-right: 0;
+	}
+}
+@media only screen and (max-width: 360px) {
+	.uams-thinstrip button.uams-emergency {
+		display: none;
 	}
 }

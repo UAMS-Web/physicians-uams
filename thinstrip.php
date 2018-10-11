@@ -16,7 +16,7 @@
           </ul>
       </nav>
       <nav id='search-quicklinks' role='navigation' aria-label='search and quick links'>
-      <button><i class="fas fa-ambulance fa-2x"></i></button>
+      <button class="uams-emergency"><i class="fas fa-ambulance fa-2x"></i></button>
       <button class='uams-search' aria-owns='uamssearcharea' aria-controls='uamssearcharea' aria-expanded='false' aria-label='open search area' aria-haspopup='true'>
 <!--[if gt IE 8]><!-->
           <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
