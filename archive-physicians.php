@@ -58,6 +58,7 @@
 														<div class="fwp-filter">[facetwp facet="physician_gender"]</div>
 														<div class="fwp-filter">[facetwp facet="physician_language"]</div>
 														<!--<div class="fwp-filter">[facetwp facet="alpha"]</div>-->
+														<div class="fwp-filter">[facetwp facet="active"]</div>
 														<button onclick="FWP.reset()">Reset</button>
 														[/section]
 													[/accordion]' ); ?>
