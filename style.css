@@ -37,6 +37,7 @@ Version: 1.0
 .uams-thinstrip button.uams-emergency {
 	background: transparent;
 	color: #9D2235;
+	margin-top: 5px;
 }
 .uams-footer .nondiscrimination-menu h5 {
 	color: #fff;

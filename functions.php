@@ -14,7 +14,7 @@ require( 'setup/class.uams-service-attributes-meta-box.php' );
 add_filter('body_class','uams_custom_body_class');
 function uams_custom_body_class( $classes ) {
 	global $post;
-	if ( rwmb_meta( 'action_menu', $post->ID ) )  {
+	if ( rwmb_meta( 'action_menu', get_the_ID() ) )  {
 
 		$classes[] = 'action-bar';
 
@@ -25,7 +25,7 @@ function uams_custom_body_class( $classes ) {
 
     }
 
-    if ( get_children( 'post_type=services&post_parent='. $post->ID ) ) {
+    if ( get_children( 'post_type=services&post_parent='. get_the_ID() ) ) {
 
         $classes[] = 'page-parent';
 
@@ -697,6 +697,15 @@ add_filter( 'facetwp_result_count', function( $output, $params ) {
     // }
     return $output;
 }, 10, 2 );
+//FacetWP Active
+add_filter( 'facetwp_preload_url_vars', function( $url_vars ) {
+    if ( 'physicians' == FWP()->helper->get_uri() ) {
+        if ( empty( $url_vars['active'] ) ) {
+            $url_vars['active'] = array( '1' );
+        }
+    }
+    return $url_vars;
+} );
 
 add_filter( 'rwmb_outside_conditions', function( $conditions ){
     $conditions['#services_to_locations_relationships_to'] = array(

@@ -31,7 +31,7 @@
 	                        <p><?php echo ( rwmb_meta('physician_short_clinical_bio') ? rwmb_meta( 'physician_short_clinical_bio') : wp_trim_words( rwmb_meta( 'physician_clinical_bio' ), 30, ' &hellip;' ) ); ?></p>
 
 	                         <a class="uams-btn btn-blue btn-sm" target="_self" title="View Profile" href="<?php echo get_permalink($post->ID); ?>">View Profile</a>
-	                        <!-- <a class="more" target="_self" title="View Profile" href="<?php echo $profileurl; ?>">View Profile</a> -->
+	                        <!-- <a class="more" target="_self" title="View Profile" href="<?php //echo $profileurl; ?>">View Profile</a> -->
 							<?php if(rwmb_meta('physician_youtube_link')) { ?>
 								<a class="uams-btn btn-red btn-play btn-sm" target="_self" title="View Physician Video" href="<?php echo rwmb_meta('physician_youtube_link'); ?>">View Video</a>
 							<?php } ?>
