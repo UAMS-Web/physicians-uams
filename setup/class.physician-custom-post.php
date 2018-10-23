@@ -986,6 +986,59 @@ function create_boards_taxonomy() {
 
 }
 
+// Register Custom Taxonomy
+function create_education_taxonomy() {
+
+	$labels = array(
+		'name'                       => 'Education Types',
+		'singular_name'              => 'Education Type',
+		'menu_name'                  => 'Education Types',
+		'all_items'                  => 'All Education Types',
+		'parent_item'                => 'Parent Education Type',
+		'parent_item_colon'          => 'Parent Education Type:',
+		'new_item_name'              => 'New Education Type',
+		'add_new_item'               => 'Add New Education Type',
+		'edit_item'                  => 'Edit Education Type',
+		'update_item'                => 'Update Education Type',
+		'view_item'                  => 'View Education Type',
+		'separate_items_with_commas' => 'Separate Education Type with commas',
+		'add_or_remove_items'        => 'Add or remove Education Types',
+		'choose_from_most_used'      => 'Choose from the most used',
+		'popular_items'              => 'Popular Education Types',
+		'search_items'               => 'Search Education Types',
+		'not_found'                  => 'Not Found',
+		'no_terms'                   => 'No Education Types',
+		'items_list'                 => 'Education Types list',
+		'items_list_navigation'      => 'Education Types list navigation',
+	);
+	$rewrite = array(
+		'slug'                       => 'educationtype',
+		'with_front'                 => false,
+		'hierarchical'               => false,
+	);
+	$capabilities = array(
+		'manage_terms'               => 'manage_options',
+		'edit_terms'                 => 'manage_options',
+		'delete_terms'               => 'manage_options',
+		'assign_terms'               => 'edit_physicians',
+	);
+	$args = array(
+		'labels'                     => $labels,
+		'hierarchical'               => false,
+		'public'                     => true,
+		'show_ui'                    => true,  //Made true to add / edit
+		'meta_box_cb'				 => false,
+		'show_admin_column'          => false,
+		'show_in_nav_menus'          => false,
+		'show_tagcloud'              => false,
+		'rewrite'                    => $rewrite,
+		'capabilities'               => $capabilities,
+	);
+	register_taxonomy( 'educationtype', array( 'physicians' ), $args );
+
+}
+add_action( 'init', 'create_education_taxonomy', 0 );
+
 function add_roles_on_plugin_activation() {
        add_role( 'doc_editor', 'Doc Profile Editor', 
        		array( 	'read' => true,
