@@ -440,9 +440,14 @@ class pubmed_field_on_change {
 // Pubmed API shortcode
 // Example: [pubmed terms="Chernoff%20R%5BAuthor%5D" count="10"]
 function pubmed_register() {
+    global $post_type;
 	if ( !is_admin() ) {
-		wp_register_script( 'pubmed-api', get_stylesheet_directory_uri() . '/js/pubmed-api-async.js', array('jquery'), null, true );
-	}
+		wp_register_script( 'pubmed-api', get_stylesheet_directory_uri() . '/assets/js/pubmed-api-async.js', array('jquery'), null, true );
+    }
+    if ( (is_single() && ('locations' == $post_type)) || is_singular( 'physicians' ) ) {
+        wp_enqueue_style( 'leaflet-css', get_stylesheet_directory_uri() . '/assets/leaflet/leaflet.css', array(), '1.1', 'all');
+        wp_enqueue_script( 'leaflet-js', get_stylesheet_directory_uri() . '/assets/leaflet/leaflet-bing.js', array(), null, false );
+    }
 }
 add_action( 'wp_enqueue_scripts', 'pubmed_register' );
 function uams_pubmed_shortcode( $atts ) {

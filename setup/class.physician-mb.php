@@ -19,8 +19,8 @@ if($wpdb->get_var("SHOW TABLES LIKE '{$wpdb->prefix}uams_locations'") != "{$wpdb
       }
       MB_Custom_Table_API::create( "{$wpdb->prefix}uams_locations", array(
           'location_abbreviation' => 'VARCHAR(25) NOT NULL',
-          'location_address_1'   => 'VARCHAR(50) NOT NULL',
-          'location_address_2'   => 'VARCHAR(65) NOT NULL',
+          'location_address_1'   => 'VARCHAR(65) NOT NULL',
+          'location_address_2'   => 'VARCHAR(85) NOT NULL',
           'location_city'   => 'VARCHAR(50) NOT NULL',
           'location_state'   => 'VARCHAR(2) NOT NULL',
           'location_zip'   => 'VARCHAR(10) NOT NULL',
@@ -29,7 +29,7 @@ if($wpdb->get_var("SHOW TABLES LIKE '{$wpdb->prefix}uams_locations'") != "{$wpdb
           'location_appointments'   => 'VARCHAR(255) NOT NULL',
           'location_fax'   => 'VARCHAR(30) NOT NULL',
           'location_email'   => 'VARCHAR(100) NOT NULL',
-          'location_web_name'   => 'VARCHAR(50) NOT NULL',
+          'location_web_name'   => 'VARCHAR(85) NOT NULL',
           'location_url'   => 'VARCHAR(100) NOT NULL',
           'location_24_7'  => 'TINYINT(1) NOT NULL',
           'location_mon_open'  => 'VARCHAR(12) NOT NULL',
@@ -49,6 +49,8 @@ if($wpdb->get_var("SHOW TABLES LIKE '{$wpdb->prefix}uams_locations'") != "{$wpdb
           'location_details'   => 'VARCHAR(100) NOT NULL',
           'location_parking'   => 'TEXT NOT NULL',
           'location_directions'   => 'TEXT NOT NULL',
+          'location_clinic'  => 'TINYINT(1) NOT NULL',
+          'location_facility'  => 'TINYINT(1) NOT NULL',
       ) );
   }
 }
@@ -65,16 +67,16 @@ if($wpdb->get_var("SHOW TABLES LIKE '{$wpdb->prefix}uams_physicians'") != "{$wpd
       }
       MB_Custom_Table_API::create( "{$wpdb->prefix}uams_physicians", array(
           //'profile_type' => 'VARCHAR(25) NOT NULL',
-          'physician_prefix' => 'VARCHAR(10) NOT NULL',
           'physician_first_name' => 'VARCHAR(50) NOT NULL',
           'physician_middle_name' => 'VARCHAR(50) NOT NULL',
           'physician_last_name' => 'VARCHAR(50) NOT NULL',
           'physician_pedigree' => 'VARCHAR(25) NOT NULL',
-          'physician_full_name' => 'VARCHAR(150) NOT NULL',
           'physician_degree' => 'VARCHAR(25) NOT NULL',
-          'physician_degreeii' => 'VARCHAR(25) NOT NULL',
-          'physician_active' => 'TINYINT(2) NOT NULL',
-          'physician_gender' => 'VARCHAR(10) NOT NULL',
+          //'physician_degreeii' => 'VARCHAR(25) NOT NULL',
+					'physician_prefix' => 'VARCHAR(10) NOT NULL',
+					'physician_gender' => 'VARCHAR(10) NOT NULL',
+					'physician_active' => 'TINYINT(2) NOT NULL',
+					'physician_full_name' => 'VARCHAR(150) NOT NULL',
           'physician_title' => 'VARCHAR(255) NOT NULL',
           'physician_clinical_bio' => 'LONGTEXT NOT NULL',
           'physician_short_clinical_bio' => 'VARCHAR(255) NOT NULL',
@@ -95,14 +97,16 @@ if($wpdb->get_var("SHOW TABLES LIKE '{$wpdb->prefix}uams_physicians'") != "{$wpd
           'physician_pid' => 'VARCHAR(10) NOT NULL',
           'physician_npi' => 'VARCHAR(10) NOT NULL',
           'physician_academic_title' => 'VARCHAR(255) NOT NULL',
-          'physican_academic_position' => 'LONGTEXT NOT NULL',
+					'physician_academic_college' => 'LONGTEXT NOT NULL',
+					'physician_academic_position' => 'LONGTEXT NOT NULL',
           'physician_academic_bio' => 'LONGTEXT NOT NULL',
           'physician_academic_short_bio' => 'VARCHAR(255) NOT NULL',
           'physician_academic_office' => 'VARCHAR(255) NOT NULL',
           'physician_academic_map' => 'VARCHAR(25) NOT NULL',
           'physician_contact_information' => 'LONGTEXT NOT NULL',
           'physician_academic_appointment' => 'LONGTEXT NOT NULL',
-          'physician_education' => 'LONGTEXT NOT NULL',
+					'physician_education' => 'LONGTEXT NOT NULL',
+					'physician_boards' => 'LONGTEXT NOT NULL',
           'physician_research_profiles_link' => 'VARCHAR(255) NOT NULL',
           'physician_pubmed_author_id' => 'VARCHAR(10) NOT NULL',
           'pubmed_author_number' => 'TINYINT(2) NOT NULL',
@@ -324,7 +328,7 @@ function uams_physicians_register_meta_boxes( $meta_boxes ) {
          
         array (
           'id' => 'location_map',
-          'type' => 'map',
+          'type' => 'osm',
           'name' => 'Map',
           'std' => '34.7492719,-92.3198281,14',
           'address_field' => 'location_address_1,location_city,location_state,location_zip',
@@ -802,6 +806,22 @@ function uams_physicians_register_meta_boxes( $meta_boxes ) {
             'width' => '100%',
           ),
         ),
+        array(
+          'name' => 'Clinic',
+          'id'   => 'location_clinic',
+          'type' => 'switch',
+          'std'  => 0, // 0 or 1
+          'columns'    => 6,
+          'tab' => 'tab_location_medical',
+        ),
+        array(
+          'name' => 'Facility',
+          'id'   => 'location_facility',
+          'type' => 'switch',
+          'std'  => 0, // 0 or 1
+          'columns'    => 6,
+          'tab' => 'tab_location_medical',
+        ),
       ),
       'validation' => array(
 		    'rules'  => array(
@@ -1016,7 +1036,8 @@ function uams_physicians_register_meta_boxes( $meta_boxes ) {
           'multiple'    => true,
           'columns' => 6,
           'tab' => 'tab_clin_profile',
-          'std' => '542', // English
+          'std' => '167', // English
+          'placeholder' => 'Select Language(s)',
           'query_args' => array(
             'orderby' => 'term_id',
           ),
@@ -1480,7 +1501,7 @@ function uams_physicians_register_meta_boxes( $meta_boxes ) {
 	                'name'    => 'Desctiption',
 	                'id'      => 'physician_education_description',
 	                'type'    => 'text',
-                  'label_description' => 'Description of the Education (if needed)',
+                  'desc' => 'Description of the Education (if needed)',
                   'columns' => 4,
 	            ),
         	),
@@ -1898,47 +1919,61 @@ function uams_physicians_register_meta_boxes( $meta_boxes ) {
 
 add_action( 'rwmb_enqueue_scripts', function ()
 {
-  wp_enqueue_script( 'pubmed-update', get_stylesheet_directory_uri() . '/js/mb-pubmed.js', [ 'jquery' ] );
-} );
-
-if ( ! function_exists('write_log')) {
-  function write_log ( $log )  {
-      if ( is_array( $log ) || is_object( $log ) ) {
-        error_log( print_r( $log, true ) );
-      } else {
-        error_log( $log );
-      }
+  global $pagenow;
+  global $post_type;
+  if (( 'post.php' == $pagenow  ) && ('physicians' == $post_type)) {
+    wp_enqueue_script( 'pubmed-update', get_stylesheet_directory_uri() . '/assets/js/mb-pubmed.js', [ 'jquery' ] );
   }
-}
+} );
 
 add_action('rwmb_physicians_before_save_post', function( $post_id )
 {
-  // Get person ID to save from "Select a Customer" field
+  // Create full name to store in 'physician_full_name' field
   $first_name = $_POST['physician_first_name'];
   $middle_name = $_POST['physician_middle_name'];
   $last_name = $_POST['physician_last_name'];
-  $pid = $_POST['post_id'];
 
   $full_name = $last_name . ' ' . $first_name . ' ' . $middle_name;
 
   $_POST['physician_full_name'] = $full_name;
 
+  // Get the ID of the post
+  $pid = get_the_ID();
+
+  global $wpdb;
+  $table_name  = $wpdb->prefix."uams_physicians";
+
+  // Check if the ID exists in the custom table
+  $ID = $wpdb->get_var("SELECT ID FROM $table_name WHERE ID = '$pid'");
+  // If the ID doesn't exist, insert a new row with the ID
+  if (!$ID) {
+     // Insert
+     $wpdb->insert( $table_name, array(
+       "ID" => get_the_ID()
+      ),
+      array( '%s' )
+    );
+  }
+
 } );
 
 add_action('rwmb_physicians_after_save_post', function( $post_id ) 
 {
+  // Create full name to store in 'physician_full_name_meta' field in postmeta
   $first_name = $_POST['physician_first_name'];
   $middle_name = $_POST['physician_middle_name'];
   $last_name = $_POST['physician_last_name'];
-  $pid = get_the_ID();
 
   $full_name = $last_name . ' ' . $first_name . ' ' . $middle_name;
+
+  // Get the post ID
+  $pid = get_the_ID();
 
   global $wpdb;
   $table_name  = $wpdb->prefix."postmeta";
 
   $ID = $wpdb->get_var("SELECT meta_id FROM $table_name WHERE meta_key='physician_full_name_meta' AND post_id= '$pid'");
-   //$ID = $meta->meta_id;
+   // If the ID exists, update the data
    if ($ID) {
      // Update
      $wpdb->update($table_name, array(
@@ -1948,7 +1983,7 @@ add_action('rwmb_physicians_after_save_post', function( $post_id )
         array( 'meta_id' => $ID )
      );
    } else {
-     // Insert
+     // Insert the data
      $wpdb->insert( $wpdb->postmeta, array(
        "post_id" => get_the_ID(),
        'meta_key' => 'physician_full_name_meta',

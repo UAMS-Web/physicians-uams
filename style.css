@@ -215,6 +215,21 @@ background-size: 410px;
 .uams-footer ul.footer-links {
 	margin-top: 10px;
 }
+/* Mapping for leaflet */
+.leaflet-icon div {
+	text-align: center;
+	border: none;
+	font-size: 15px;
+	font-weight: 700;
+	line-height: 1.8em;
+	background-repeat: no-repeat;
+	background-position: center;
+	width: 100%;
+	height: 100%;
+}
+.leaflet-icon [class*="fa"] {
+	margin-top: 25%;
+}
 @media (max-width: 992px) {
 	.ds-summary {
 		margin-bottom: 10px;
