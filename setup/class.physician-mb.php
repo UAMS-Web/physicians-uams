@@ -8,6 +8,7 @@
 
 global $wpdb;
 //$table_name = $wpdb->prefix.'uams_locations';
+/*
 if($wpdb->get_var("SHOW TABLES LIKE '{$wpdb->prefix}uams_locations'") != "{$wpdb->prefix}uams_locations") {
   add_action( 'init', 'location_create_table' );
   function location_create_table() {
@@ -54,6 +55,7 @@ if($wpdb->get_var("SHOW TABLES LIKE '{$wpdb->prefix}uams_locations'") != "{$wpdb
       ) );
   }
 }
+*/
 
 $table_name = $wpdb->prefix.'uams_physicians';
 if($wpdb->get_var("SHOW TABLES LIKE '{$wpdb->prefix}uams_physicians'") != "{$wpdb->prefix}uams_physicians") {
@@ -170,6 +172,7 @@ function uams_physicians_register_meta_boxes( $meta_boxes ) {
 
     global $wpdb;
 
+/*
     // Get the current post content and set as the default value for the wysiwyg field.
     $default_excerpt = '';
     $post_id         = filter_input( INPUT_GET, 'post', FILTER_SANITIZE_NUMBER_INT );
@@ -404,6 +407,7 @@ function uams_physicians_register_meta_boxes( $meta_boxes ) {
           'options' => array(
             'text'  => 'Text',
             'number'  => 'Phone #',
+            'after'  => 'Additional Text',
           ),
           'clone'  => true,
         ),
@@ -444,7 +448,7 @@ function uams_physicians_register_meta_boxes( $meta_boxes ) {
           'name' => 'Open 24/7',
           'id'   => 'location_24_7',
           'type' => 'switch',
-          'std'  => 0, // 0 or 1
+          'std'  => false, // 0 or 1
           'columns'    => 12,
           'tab' => 'tab_location_hours',
         ),
@@ -482,7 +486,7 @@ function uams_physicians_register_meta_boxes( $meta_boxes ) {
           'std'  => '<h4>Sunday Hours</h4>',
           'columns' => 3,
           'tab' => 'tab_location_hours',
-          'hidden' => array( 'location_24_7', '=', '1' ),
+          'hidden' => array( 'location_24_7', '!=', '' ),
         ),
 
         array(
@@ -857,6 +861,7 @@ function uams_physicians_register_meta_boxes( $meta_boxes ) {
 		    // )
 		  ),
     );
+*/
 
     $meta_boxes[] = array (
       'id' => 'physicians',
@@ -969,6 +974,7 @@ function uams_physicians_register_meta_boxes( $meta_boxes ) {
           'inline' => false,
           'tab' => 'tab_details',
         ),
+/*
         array (
           'id' => 'physician_active',
           'type' => 'checkbox',
@@ -981,7 +987,9 @@ function uams_physicians_register_meta_boxes( $meta_boxes ) {
             'title' => 'Active',
           ),
           'columns' => 3,
+          'visible' => array( $post_ID, '=', 1 ),
         ),
+*/
         array(
             'id'   => 'physician_full_name',
             'type' => 'hidden',
@@ -1196,6 +1204,7 @@ function uams_physicians_register_meta_boxes( $meta_boxes ) {
           'id' => 'medical_procedures',
           'type' => 'taxonomy',
           'name' => 'Medical Procedures',
+          'label_description' => 'Not used',
           'taxonomy' => 'medical_procedures',
           'field_type' => 'select_advanced',
           'placeholder' => 'Select an Item',
@@ -1676,6 +1685,7 @@ function uams_physicians_register_meta_boxes( $meta_boxes ) {
 		  ),
     );
 
+/*
     $service_excerpt = '';
     $post_id         = filter_input( INPUT_GET, 'post', FILTER_SANITIZE_NUMBER_INT );
     if ( ! $post_id ) {
@@ -1915,6 +1925,7 @@ function uams_physicians_register_meta_boxes( $meta_boxes ) {
           ),
       ),
     );
+*/
 
     return $meta_boxes;
 
@@ -1970,6 +1981,8 @@ add_action('rwmb_physicians_after_save_post', function( $post_id )
 
   $full_name = $last_name . ' ' . $first_name . ' ' . $middle_name;
 
+  $short_bio = $_POST['physician_short_clinical_bio'];
+
   // Get the post ID
   $pid = get_the_ID();
 
@@ -1996,4 +2009,10 @@ add_action('rwmb_physicians_after_save_post', function( $post_id )
       array( '%d', '%s', '%s' )
     );
    }
+   //
+   $wpdb->update($wpdb->prefix."posts", array(
+	   		'post_excerpt' => $short_bio,
+   		),
+   		array( 'id' => $pid )
+   	);
 } );

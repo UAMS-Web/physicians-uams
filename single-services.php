@@ -76,7 +76,7 @@
     <div class="hero-content col-md-<?php echo (($sidebar[0]!="on") ? "8" : "12" ); ?>  uams-content" role='main'>
 
       <?php
-	      	echo get_uams_breadcrumbs();
+	      	get_template_part( 'breadcrumbs' );
 	  ?>
 
       <div id='main_content' class="uams-body-copy" tabindex="-1">

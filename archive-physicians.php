@@ -39,7 +39,7 @@
 
 	      <div id='main_content' class="uams-body-copy" tabindex="-1">
 
-	      		<?php 
+	      		<?php
 					$fwp_filter = '';
 					$uri = $_SERVER["REQUEST_URI"];
 					if( strpos($uri, 'fwp_') !== false ) {
@@ -51,7 +51,7 @@
 		        	<div class="col-md-4">
 			        	<?php echo do_shortcode( '[wpdreams_ajaxsearchpro id=1]' ); ?>
 			        	<?php echo do_shortcode( '[accordion]
-													    [section title="Advanced Filter" '. $fwp_filter .']			
+													    [section title="Advanced Filter" '. $fwp_filter .']
 													    <div class="fwp-filter">[facetwp facet="primary_care"]</div>
 														<div class="fwp-filter">[facetwp facet="conditions"]</div>
 														<div class="fwp-filter">[facetwp facet="patient_types"]</div>
@@ -79,9 +79,12 @@
 						<?php //echo facetwp_display( 'pager' ); ?>
 						<?php //echo do_shortcode('[facetwp load_more="true" label="Load more"]'); ?>
 
+						<script src="<?php echo get_stylesheet_directory_uri(); ?>/assets/js/jquery-accessible-modal-window-aria.js"></script>
+						<div id="why_not_modal" class="hidden">
+							There is no publicly available rating for this medical professional for one of two reasons: 1) he or she does not see patients or 2) he or she sees patients but has not yet received the minimum number of Patient Satisfaction Reviews. To be eligible for display, we require a minimum of 30 surveys. This ensures that the rating is statistically reliable and a true reflection of patient satisfaction.
+						</div>
 					</div><!-- .col -->
 				</div><!-- .row -->
-
    			</div><!-- main_content -->
 
     	</div><!-- uams-content -->
