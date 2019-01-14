@@ -204,16 +204,16 @@ function create_clinical_conditions_taxonomy() {
 // first do the translations part for GUI
 
   $labels = array(
-		'name'                           => 'Conditions',
+		'name'                           => 'Conditions & Treatments',
 		'singular_name'                  => 'Condition',
 		'search_items'                   => 'Search Conditions',
-		'all_items'                      => 'All Conditions',
+		'all_items'                      => 'All Conditions & Treatments',
 		'edit_item'                      => 'Edit Condition',
-		'update_item'                    => 'Update Condition',
-		'add_new_item'                   => 'Add New Condition',
-		'new_item_name'                  => 'New Condition',
+		'update_item'                    => 'Update Condition / Treatment',
+		'add_new_item'                   => 'Add New Condition / Treatment',
+		'new_item_name'                  => 'New Condition / Treatment',
 		'menu_name'                      => 'Conditions',
-		'view_item'                      => 'View Condition',
+		'view_item'                      => 'View Condition / Treatment',
 		'popular_items'                  => 'Popular Condition',
 		'separate_items_with_commas'     => 'Separate conditions with commas',
 		'add_or_remove_items'            => 'Add or remove conditions',
@@ -226,7 +226,7 @@ function create_clinical_conditions_taxonomy() {
 		'items_list_navigation'      	 => 'Conditions list navigation',
 	);
   	$rewrite = array(
-		'slug'                       => 'conditions',
+		'slug'                       => 'conditions-treatments',
 		'with_front'                 => true,
 		'hierarchical'               => true,
 	);

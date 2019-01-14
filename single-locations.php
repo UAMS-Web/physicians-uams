@@ -127,7 +127,7 @@
 									/* [lat, lon, fillColor, strokeColor, labelClass, iconText, popupText] */
 									var markers = [  
 										// example [ 34.74376029995541, -92.31828863640054, "00F","000","white","A","I am a blue icon." ],
-										[ <?php echo $map['latitude']; ?>, <?php echo $map['longitude'] ?>, "9d2235","222", "white", '<i class="fas fa-circle fa-sm"></i>', "" ]
+										[ <?php echo $map['latitude']; ?>, <?php echo $map['longitude'] ?>, "9d2235","222", "white", '<?php echo (rwmb_meta('location_facility', $args )) ? '<i class="fas fa-hospital-symbol"></i>' : ((rwmb_meta('location_clinic', $args )) ? '<i class="fas fa-notes-medical"></i>' :'<i class="fas fa-circle fa-sm"></i>'); ?>', "" ]
 									]
 									//Loop through the markers array
 									var markerArray = [];

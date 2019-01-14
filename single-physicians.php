@@ -196,10 +196,11 @@
 								 	if( !empty ( $schools ) ): ?>
 	                            	<h3>Education</h3>
 								    <ul>
-								    <?php foreach( $schools as $school ): 
+								    <?php foreach( $schools as $school ):
 								    	$school_name = get_term( $school['physician_education_school'], 'schools');
+								    	$education_type = get_term($school['physician_education_type'], 'educationtype');
 								    ?>
-								        <li><?php echo $school['physician_education_type']; ?> - <?php echo ($school['physician_education_description'] ? '' . $school['physician_education_description'] .'<br/>' : ''); ?><?php echo $school_name->name; ?></li>
+								        <li><?php echo $education_type->name; ?> - <?php echo ($school['physician_education_description'] ? '' . $school['physician_education_description'] .'<br/>' : ''); ?><?php echo $school_name->name; ?></li>
 								    <?php endforeach; ?>
 								    </ul>
 								<?php //endif; ?>

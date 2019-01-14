@@ -20,8 +20,35 @@
 	            	<span><a href="<?php echo get_permalink($post->ID); ?>" target="_self"><?php the_post_thumbnail( 'medium' ); ?></a></span>
 	            </div>
 				
-				<?php if(rwmb_meta('physician_npi')) { ?>
-				<div class="ds-summary" data-ds-id="<?php echo rwmb_meta( 'physician_npi' ); ?>"></div>
+				<?php if(rwmb_meta('physician_npi')) { 
+					$request = wp_remote_get( 'https://transparency.nrchealth.com/widget/api/org-profile/uams/npi/' . rwmb_meta( 'physician_npi' ) . '/0?pretty' );
+
+					if( is_wp_error( $request ) ) {
+						return false; // Bail early
+					}
+
+					$body = wp_remote_retrieve_body( $request );
+
+					$data = json_decode( $body );
+
+					if( ! empty( $data ) ) {
+
+						echo '<script>';
+						print_r($data);
+						echo '</script>';
+						
+						//foreach( $data->profile as $rating ) {
+							echo '<div itemtype="http://schema.org/AggregateRating" itemprop="aggregateRating" itemscope="">';
+							echo '<div class="ds-title">Patient Rating</div>';
+							echo '<div><span class="ds-stars ds-stars'. $data->profile->averageStarRatingStr .'"></span></div>';
+							echo '<div class="ds-xofy"><span class="ds-average" itemprop="ratingValue">'. $data->profile->averageRatingStr .'</span><span class="ds-average-max">out of 5</span></div>';
+							echo '<div class="ds-ratings"><span class="ds-ratingcount" itemprop="ratingCount">'. $data->profile->reviewcount .'</span> Ratings</div>';
+							echo '<div class="ds-comments"><span class="ds-commentcount">'. $data->profile->bodycount .'</span> Comments</div>';
+							echo '</div>';
+							//echo '<a href="' . esc_url( $rating->info->link ) . '">' . $product->info->title . '</a>';
+						//}
+					} ?>
+				<!-- <div class="ds-summary" data-ds-id="<?php echo rwmb_meta( 'physician_npi' ); ?>"></div> -->
 				<?php } ?>
 	        </div>
 	        <div class="col-md-9" class="margin-top-none margin-bottom-none">
@@ -91,7 +118,8 @@
 	</div><!-- .color -->
 	<?php $i++; ?>
 	<?php endwhile; ?>
-	<script src="https://www.docscores.com/widget/v2/uams/npi/lotw.js" async></script>
+	<link rel="stylesheet" type="text/css" href="https://www.docscores.com/resources/css/docscores-lotw.v1330-2018121714.css" />
+	<!-- <script src="https://www.docscores.com/widget/v2/uams/npi/lotw.js" async></script>
 	<script>
 		(function ($, window) {
 
@@ -167,7 +195,7 @@
 			});
 		});
 	})(jQuery);
-	</script>
+	</script> -->
 	<?php else : ?>
 	<p><?php _e( 'Sorry, no physicians matched your criteria.' ); ?></p>
 	<?php endif; ?>

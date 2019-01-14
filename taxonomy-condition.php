@@ -36,7 +36,7 @@
 	    	<ul>
 	    		<li><a href="http://www.uams.edu" title="University of Arkansas for Medical Scineces">Home</a></li>
 	    		<li><a href="/" title="<?php echo str_replace('   ', ' ', get_bloginfo('title')); ?>"><?php echo str_replace('   ', ' ', get_bloginfo('title')); ?></a></li>
-	    		<li><a href="<?php echo get_bloginfo('url'); ?>/physicians/" title="Physicians">Physicians</a></li>
+	    		<li><a href="<?php echo get_bloginfo('url'); ?>/conditions-treatments/" title="Conditions & Treatments">Conditions &amp; Treatments</a></li>
 	    		<li class="current"><span><?php echo $tax->name; ?></span>
 	    	</ul>
 	    </nav>
@@ -47,7 +47,7 @@
 
 					<div class="col-md-8 people">
 
-						<h1>Specialty: <?php echo single_cat_title( '', false ); ?></h1><hr>
+						<h1><?php echo single_cat_title( '', false ); ?></h1><hr>
 
 					    <?php echo (term_description( '', false ) ? '<p>' .term_description( '', false ) . '</p>' : '' ); ?>
 
@@ -55,9 +55,11 @@
 					    		$specialty_url = rwmb_meta( 'specialty_url', array( 'object_type' => 'term' ), $term->term_id );
 					     		echo ($specialty_url ? '<p><a href="' . $specialty_url . '">More Information</a></p>' : '' ); ?>
 
-					     <?php echo facetwp_display( 'facet', 'alpha' ); ?>
+					     <?php //echo facetwp_display( 'facet', 'alpha' ); ?>
 
-					    <?php echo facetwp_display( 'template', 'physician' ); ?>
+					    <h3>Physicians</h3>
+						
+						<?php echo facetwp_display( 'template', 'physician' ); ?>
 
 					</div><!-- .col -->
 					<div class="col-md-4">

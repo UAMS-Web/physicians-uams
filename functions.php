@@ -111,14 +111,28 @@ function get_uams_breadcrumbs()
         {
           $posttype = get_post_type_object( get_post_type() );
           $archive_link = get_post_type_archive_link( $posttype->query_var );
+          $ancestors[] = $post->ID;
           if (!empty($archive_link)) {
             $html .=  '<li><a href="'  . $archive_link .'" title="'. $posttype->labels->menu_name .'">'. $posttype->labels->menu_name  . '</a>';
           }
           else if (!empty($posttype->rewrite['slug'])){
-            $html .=  '<li><a href="'  . site_url('/' . $posttype->rewrite['slug'] . '/') .'" title="'. $posttype->labels->menu_name .'">'. $posttype->labels->menu_name  . '</a>';
+            $html .=  '<li><a href="'  . site_url('/' . $posttype->rewrite['slug'] . '/') .'" title="'. $posttype->labels->menu_name .'">'. $posttype->labels->menu_name  . '</a></li>';
           }
+          foreach ( array_filter( $ancestors ) as $index=>$ancestor )
+            {
+                $class      = $index+1 == count($ancestors) ? ' class="current" ' : '';
+                $post       = get_post( $ancestor );
+                $url        = get_permalink( $post->ID );
+                $title_attr = esc_attr( $post->post_title );
+                if (!empty($class)){
+                    $html .= "<li $class><span>{$post->post_title}</span></li>";
+                }
+                else {
+                    $html .= "<li><a href=\"$url\" title=\"{$title_attr}\">{$post->post_title}</a></li>";
+                }
+            }
         }
-        $html .=  '<li class="current"><span>'. get_the_title( $post->ID ) . '</span>';
+        //$html .=  '<li class="current"><span>'. get_the_title( $post->ID ) . '</span>';
       }
     }
 
@@ -192,12 +206,12 @@ function uams_list_services( $mobile = false )
 
     return  $bool && !is_search() ? sprintf( '%s<ul class="%s first-level">%s</ul>', $toggle, $class, $pages ) : '';
 
-  }         
+  }
 
 function register_uamshealth_menus() {
 	register_nav_menus(
 	  array(
-		//'new-menu' => __( 'New Menu' ), 
+		//'new-menu' => __( 'New Menu' ),
 		'nondiscrimination-menu' => __( 'Non-discrimination Languages' )
 	  )
 	);
@@ -444,7 +458,7 @@ function pubmed_register() {
 	if ( !is_admin() ) {
 		wp_register_script( 'pubmed-api', get_stylesheet_directory_uri() . '/assets/js/pubmed-api-async.js', array('jquery'), null, true );
     }
-    if ( (is_single() && ('locations' == $post_type)) || is_singular( 'physicians' ) ) {
+    if ( is_singular( 'locations' ) || is_singular( 'physicians' ) ) {
         wp_enqueue_style( 'leaflet-css', get_stylesheet_directory_uri() . '/assets/leaflet/leaflet.css', array(), '1.1', 'all');
         wp_enqueue_script( 'leaflet-js', get_stylesheet_directory_uri() . '/assets/leaflet/leaflet-bing.js', array(), null, false );
     }
@@ -474,6 +488,7 @@ add_action( 'mb_relationships_init', function() {
         'from' => array(
             'object_type' => 'post',
             'post_type'   => 'physicians',
+            'admin_column' => 'after title',
             'meta_box'    => array(
                 'title'       => 'Location(s)',
                 'field_title' => 'Select Location',
@@ -484,6 +499,7 @@ add_action( 'mb_relationships_init', function() {
         'to'   => array(
             'object_type' => 'post',
             'post_type'   => 'locations',
+            'admin_column' => true,
             'meta_box'    => array(
                 'hidden'	=> true,
                 'title'       => 'Physician(s)',
@@ -530,7 +546,7 @@ add_filter( 'facetwp_is_main_query', function( $is_main_query, $query ) {
     return $is_main_query;
 }, 10, 2 );
 
-// FacetWP scripts 
+// FacetWP scripts
 function fwp_facet_scripts() {
 ?>
 <script>
@@ -611,7 +627,7 @@ function fwp_load_more() {
         if ('object' != typeof FWP) {
             return;
         }
-        wp.hooks.addFilter('facetwp/template_html', function(resp, params) {
+        FWP.hooks.addFilter('facetwp/template_html', function(resp, params) {
             if (FWP.is_load_more) {
                 FWP.is_load_more = false;
                 $('.facetwp-template').append(params.html);
@@ -660,7 +676,7 @@ add_action( 'wp_head', 'fwp_load_more', 99 );
 add_filter( 'facetwp_sort_options', function( $options, $params ) {
 	if ( is_post_type_archive( 'physicians' ) || is_singular( 'physicians' ) ) {
 		$params = array(
-		    'template_name' => 'physicians', 
+		    'template_name' => 'physicians',
 		);
 	    $options['name_asc'] = array(
 	        'label' => __( 'Name (A-Z)', 'fwp' ),
@@ -682,7 +698,7 @@ add_filter( 'facetwp_sort_options', function( $options, $params ) {
      	unset( $options['title_desc'] );
 	 } elseif ( is_post_type_archive( 'locations' ) || is_singular( 'locations' ) ) {
 	 	$params = array(
-		    'template_name' => 'locations', 
+		    'template_name' => 'locations',
 		);
 	 }
     //);
@@ -721,3 +737,25 @@ add_filter( 'rwmb_outside_conditions', function( $conditions ){
     );
     return $conditions;
 } );
+
+add_filter('manage_physicians_posts_columns', 'posts_physicians_columns', 10);
+add_action('manage_physicians_posts_custom_column', 'posts_physicians_custom_columns', 10, 2);
+
+function posts_physicians_columns($columns){
+    $custom_columns = array();
+    $title = 'title';
+    foreach($columns as $key => $value) {
+        if ($key==$title){
+            $custom_columns['physician_post_thumbs'] = __('Headshot');   // Move before title column
+        }
+          $custom_columns[$key] = $value;
+      }
+
+    return $custom_columns;
+}
+
+function posts_physicians_custom_columns($column_name, $id){
+    if($column_name === 'physician_post_thumbs'){
+        echo get_the_post_thumbnail( $post_id, array( 80, 80) );
+    }
+}
