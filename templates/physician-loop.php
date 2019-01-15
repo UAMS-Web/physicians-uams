@@ -12,44 +12,53 @@
 	?>
 	<div class="<?php echo $class; ?> archive-box">
 	    <div class="row">
-	        <div class="col-md-12"><a href="<?php echo get_permalink($post->ID); ?>"><h2 class="mt0"><?php echo $full_name; ?></h2></a></div>
+	        <div class="col-md-12"><a href="<?php echo get_permalink($post->ID); ?>"><h2 class="mt0" itemprop="name"><?php echo $full_name; ?></h2></a></div>
 		</div>
 		<div class="row">
 	        <div class="col-md-3" class="margin-top-none margin-bottom-two">
 	            <div class="margin-bottom-two">
-	            	<span><a href="<?php echo get_permalink($post->ID); ?>" target="_self"><?php the_post_thumbnail( 'medium' ); ?></a></span>
+	            	<span><a href="<?php echo get_permalink($post->ID); ?>" target="_self"><?php the_post_thumbnail( 'medium',  array( 'itemprop' => 'image' ) ); ?></a></span>
 	            </div>
-				
-				<?php if(rwmb_meta('physician_npi')) { 
-					$request = wp_remote_get( 'https://transparency.nrchealth.com/widget/api/org-profile/uams/npi/' . rwmb_meta( 'physician_npi' ) . '/0?pretty' );
+				<?php
+					if(rwmb_meta('physician_npi')) {
 
-					if( is_wp_error( $request ) ) {
-						return false; // Bail early
-					}
+							$npi =  rwmb_meta( 'physician_npi' );
+							$request = wp_nrc_cached_api( $npi );
 
-					$body = wp_remote_retrieve_body( $request );
+							$data = json_decode( $request );
 
-					$data = json_decode( $body );
+							if( ! empty( $data ) ) {
 
-					if( ! empty( $data ) ) {
+								$rating_valid = $data->valid;
 
-						echo '<script>';
-						print_r($data);
-						echo '</script>';
-						
-						//foreach( $data->profile as $rating ) {
-							echo '<div itemtype="http://schema.org/AggregateRating" itemprop="aggregateRating" itemscope="">';
-							echo '<div class="ds-title">Patient Rating</div>';
-							echo '<div><span class="ds-stars ds-stars'. $data->profile->averageStarRatingStr .'"></span></div>';
-							echo '<div class="ds-xofy"><span class="ds-average" itemprop="ratingValue">'. $data->profile->averageRatingStr .'</span><span class="ds-average-max">out of 5</span></div>';
-							echo '<div class="ds-ratings"><span class="ds-ratingcount" itemprop="ratingCount">'. $data->profile->reviewcount .'</span> Ratings</div>';
-							echo '<div class="ds-comments"><span class="ds-commentcount">'. $data->profile->bodycount .'</span> Comments</div>';
-							echo '</div>';
-							//echo '<a href="' . esc_url( $rating->info->link ) . '">' . $product->info->title . '</a>';
-						//}
-					} ?>
-				<!-- <div class="ds-summary" data-ds-id="<?php echo rwmb_meta( 'physician_npi' ); ?>"></div> -->
-				<?php } ?>
+								if ( $rating_valid ){
+ 									echo '<div class="text-center">';
+									echo '<div class="ds-title">Patient Rating</div>';
+									echo '<div><span class="ds-stars ds-stars'. $data->profile->averageStarRatingStr .'"></span></div>';
+									echo '<div class="ds-xofy"><span class="ds-average">'. $data->profile->averageRatingStr .'</span><span class="ds-average-max">out of 5</span></div>';
+									echo '<div class="ds-ratings"><span class="ds-ratingcount">'. $data->profile->reviewcount .'</span> Ratings</div>';
+									echo '<div class="ds-comments"><span class="ds-commentcount">'. $data->profile->bodycount .'</span> Comments</div>';
+ 									echo '</div>';
+									//echo '<a href="' . esc_url( $rating->info->link ) . '">' . $product->info->title . '</a>';
+								} else { ?>
+									<div class="text-center">
+									<div class="ds-title">Patient Rating</div>
+									<div><span class="ds-stars ds-stars0"></span></div>
+									<div class="small bold">No Patient Satisfaction Reviews</div>
+									<div><a href="#" class="js-modal" data-modal-close-text="Close" data-modal-close-title="Close this window" data-modal-content-id="why_not_modal" data-modal-title="Why Not?">Why Not?</a></div>
+									</div>
+								<?php
+								}
+							}
+						} else { ?>
+							<div class="text-center">
+							<div class="ds-title">Patient Rating</div>
+							<div><span class="ds-stars ds-stars0"></span></div>
+							<div class="small bold">No Patient Satisfaction Reviews</div>
+							<div><a href="#" class="js-modal" data-modal-close-text="Close" data-modal-close-title="Close this window" data-modal-content-id="why_not_modal" data-modal-title="Why Not?">Why Not?</a></div>
+							</div>
+						<?php }
+					?>
 	        </div>
 	        <div class="col-md-9" class="margin-top-none margin-bottom-none">
 	                <div class="row" class="margin-top-none margin-bottom-none">
@@ -67,7 +76,7 @@
 	                    </div>
 	                    <div class="col-md-6">
 
-	                        <?php // load all 'specialties' terms for the post 
+	                        <?php // load all 'specialties' terms for the post
 							$specialties = rwmb_meta('medical_specialties');
 
 								// we will use the first term to load ACF data from
@@ -94,7 +103,7 @@
 							    ),
 							    'nopaging'     => true,
 							) );
-							
+
 							?>
 							<?php if( $locations ): ?>
 							<h3 data-fontsize="16" data-lineheight="24"><i class="fa fa-medkit"></i> Clinic(s)</h3>
@@ -118,8 +127,11 @@
 	</div><!-- .color -->
 	<?php $i++; ?>
 	<?php endwhile; ?>
-	<link rel="stylesheet" type="text/css" href="https://www.docscores.com/resources/css/docscores-lotw.v1330-2018121714.css" />
-	<!-- <script src="https://www.docscores.com/widget/v2/uams/npi/lotw.js" async></script>
+		<link rel="stylesheet" type="text/css" href="https://www.docscores.com/resources/css/docscores-lotw.v1330-2018121714.css" />
+
+<!-- 	<script src="https://www.docscores.com/widget/v2/uams/npi/lotw.js" async></script> -->
+
+<!--
 	<script>
 		(function ($, window) {
 
@@ -195,7 +207,8 @@
 			});
 		});
 	})(jQuery);
-	</script> -->
+	</script>
+-->
 	<?php else : ?>
 	<p><?php _e( 'Sorry, no physicians matched your criteria.' ); ?></p>
 	<?php endif; ?>

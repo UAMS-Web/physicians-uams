@@ -7,7 +7,10 @@ add_filter('_includes/acf-pro/settings/show_admin', '__return_true');
 require( 'setup/class.physicians.php' );
 require( 'setup/class.physician-custom-post.php' );
 //require( 'setup/class.physicians-acf.php' );
+require( 'setup/class.locations-mb.php' );
 require( 'setup/class.physician-mb.php' );
+require( 'setup/class.services-mb.php' );
+require( 'setup/class.taxonomies-mb.php' );
 require( 'setup/class.physicians-settings.php' );
 require( 'setup/class.uams-service-attributes-meta-box.php' );
 
@@ -111,28 +114,14 @@ function get_uams_breadcrumbs()
         {
           $posttype = get_post_type_object( get_post_type() );
           $archive_link = get_post_type_archive_link( $posttype->query_var );
-          $ancestors[] = $post->ID;
           if (!empty($archive_link)) {
             $html .=  '<li><a href="'  . $archive_link .'" title="'. $posttype->labels->menu_name .'">'. $posttype->labels->menu_name  . '</a>';
           }
           else if (!empty($posttype->rewrite['slug'])){
-            $html .=  '<li><a href="'  . site_url('/' . $posttype->rewrite['slug'] . '/') .'" title="'. $posttype->labels->menu_name .'">'. $posttype->labels->menu_name  . '</a></li>';
+            $html .=  '<li><a href="'  . site_url('/' . $posttype->rewrite['slug'] . '/') .'" title="'. $posttype->labels->menu_name .'">'. $posttype->labels->menu_name  . '</a>';
           }
-          foreach ( array_filter( $ancestors ) as $index=>$ancestor )
-            {
-                $class      = $index+1 == count($ancestors) ? ' class="current" ' : '';
-                $post       = get_post( $ancestor );
-                $url        = get_permalink( $post->ID );
-                $title_attr = esc_attr( $post->post_title );
-                if (!empty($class)){
-                    $html .= "<li $class><span>{$post->post_title}</span></li>";
-                }
-                else {
-                    $html .= "<li><a href=\"$url\" title=\"{$title_attr}\">{$post->post_title}</a></li>";
-                }
-            }
         }
-        //$html .=  '<li class="current"><span>'. get_the_title( $post->ID ) . '</span>';
+        $html .=  '<li class="current"><span>'. get_the_title( $post->ID ) . '</span>';
       }
     }
 
@@ -308,13 +297,13 @@ function cd_sort_physicians( $query ) {
         if ( $query->is_tax() || $query->is_post_type_archive('physicians') ) {
 	        $query->set('meta_query', array(
                 'physician_last_name' => array(
-                    'key' => 'physician_last_name',
+                    'key' => rwmb_meta('physician_last_name'),
                 ),
                 'physician_first_name' => array(
-                    'key' => 'physician_first_name',
+                    'key' => rwmb_meta('physician_first_name'),
                 ),
                 'physician_middle_name' => array(
-                    'key' => 'physician_middle_name',
+                    'key' => rwmb_meta('physician_middle_name'),
                 )
             ));
             $query->set('orderby',array(
@@ -326,7 +315,7 @@ function cd_sort_physicians( $query ) {
     }
 }
 
-// URL modification for Ajax Search Pro
+// Ajax Search Pro modifications
 add_filter( 'asp_results', 'asp_custom_link_meta_results', 1, 2 );
 function asp_custom_link_meta_results( $results, $id ) {
 
@@ -359,6 +348,29 @@ function asp_custom_link_meta_results( $results, $id ) {
 	  }
 	  return $results;
 	}
+}
+
+add_filter( 'asp_result_image_after_prostproc', 'asp_get_post_type_image', 1, 2 );
+
+function asp_get_post_type_image( $image, $id ) {
+
+   if ( empty($image) ) {
+       $type = get_post_type( $id );
+
+       switch ($type) {
+           case "physicians":
+               $image = "/wp-content/uploads/2018/12/image01299.png";
+               break;
+           case "locations":
+               $image = "/wp-content/uploads/2019/01/pin.png";
+               break;
+           default:
+               $image = get_stylesheet_directory_uri() ."/assets/admin-icons/services-icon.png";
+               break;
+       }
+   }
+
+    return $image;
 }
 
 
@@ -458,7 +470,7 @@ function pubmed_register() {
 	if ( !is_admin() ) {
 		wp_register_script( 'pubmed-api', get_stylesheet_directory_uri() . '/assets/js/pubmed-api-async.js', array('jquery'), null, true );
     }
-    if ( is_singular( 'locations' ) || is_singular( 'physicians' ) ) {
+    if ( (is_single() && ('locations' == $post_type)) || is_singular( 'physicians' ) ) {
         wp_enqueue_style( 'leaflet-css', get_stylesheet_directory_uri() . '/assets/leaflet/leaflet.css', array(), '1.1', 'all');
         wp_enqueue_script( 'leaflet-js', get_stylesheet_directory_uri() . '/assets/leaflet/leaflet-bing.js', array(), null, false );
     }
@@ -636,7 +648,7 @@ function fwp_load_more() {
             return resp;
         });
         $(document).on('click', '.fwp-load-more', function() {
-            $('.fwp-load-more').html('Loading more people');
+            $('.fwp-load-more').html('Loading more');
             $('.fwp-load-more').after('<span class="fwp-loader"></span>');
             FWP.is_load_more = true;
             FWP.paged = parseInt(FWP.settings.pager.page) + 1;
@@ -644,7 +656,7 @@ function fwp_load_more() {
             FWP.refresh();
         });
         $(document).on('click', '.fwp-load-all', function() {
-            $('.fwp-load-all').html('Loading all people');
+            $('.fwp-load-all').html('Loading all');
             $('.fwp-load-all').after('<span class="fwp-loader"></span>');
             FWP.soft_refresh = true;
             FWP.extras.per_page = 500
@@ -738,6 +750,7 @@ add_filter( 'rwmb_outside_conditions', function( $conditions ){
     return $conditions;
 } );
 
+// Admin Columns
 add_filter('manage_physicians_posts_columns', 'posts_physicians_columns', 10);
 add_action('manage_physicians_posts_custom_column', 'posts_physicians_custom_columns', 10, 2);
 
@@ -759,3 +772,51 @@ function posts_physicians_custom_columns($column_name, $id){
         echo get_the_post_thumbnail( $post_id, array( 80, 80) );
     }
 }
+
+// NRC JSON API Call
+function wp_nrc_cached_api( $npi ) {
+	// Namespace in case of collision, since transients don't support groups like object caching.
+	$url = 'https://transparency.nrchealth.com/widget/api/org-profile/uams/npi/' . $npi . '/0';
+	$cache_key = 'nrc_' . $npi;
+	$request = get_transient( $cache_key );
+
+	if ( false === $request ) {
+		$request = wp_remote_retrieve_body( wp_remote_get( $url ) );
+
+		if ( is_wp_error( $request ) ) {
+			// Cache failures for a short time, will speed up page rendering in the event of remote failure.
+			set_transient( $cache_key, $request, MINUTE_IN_SECONDS * 15 );
+		} else {
+			// Success, cache for a longer time.
+			set_transient( $cache_key, $request, DAY_IN_SECONDS );
+		}
+	}
+	return $request;
+}
+
+//$request = wp_nrc_cached_api(  );
+
+/*
+if ( is_wp_error( $request ) ) {
+	return false;
+}
+
+$body = wp_remote_retrieve_body( $request );
+$data = json_decode( $body );
+
+if ( ! empty( $data ) ) {
+	foreach ( $data as $object ) {
+		echo '<p>' . wp_kses_post( $object->introduction ) . '</p>';
+	}
+}
+
+$request = wp_remote_get( 'https://transparency.nrchealth.com/widget/api/org-profile/uams/npi/' . rwmb_meta( 'physician_npi' ) . '/0' );
+
+					if( is_wp_error( $request ) ) {
+						return false; // Bail early
+					}
+
+					$body = wp_remote_retrieve_body( $request );
+
+					$data = json_decode( $body );
+*/

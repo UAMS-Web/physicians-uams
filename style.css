@@ -71,7 +71,7 @@ Version: 1.0
 .people h3,
 .people h4 {
 	margin-top: 0;
-} 
+}
 .whiteBackground { background-color: #fff; }
 .grayBackground { background-color: #fafafa; }
 .specialty-filter,
@@ -83,12 +83,12 @@ Version: 1.0
 .facetwp__loader button {
     margin-right: 1em;
 }
-.facetwp-counts { 
-	display: inline-block; 
+.facetwp-counts {
+	display: inline-block;
 }
 .archive-box {
 	border:1px solid #ececec;
-	padding:10px; 
+	padding:10px;
 	margin-bottom: 10px;
 }
 .photo-shadow {
@@ -201,11 +201,11 @@ background-size: 410px;
 	margin-bottom: 20px;
 }
 #footer-widgets .shortcode-blogroll-mini svg path,
-#footer-widgets .widget_recent_entries svg path, 
-#footer-widgets .recent-posts-widget svg path, 
-#footer-widgets .uams-recent svg path, 
-#footer-widgets .uams-top-posts svg path, 
-#footer-widgets .uams-widget-related-posts svg path, 
+#footer-widgets .widget_recent_entries svg path,
+#footer-widgets .recent-posts-widget svg path,
+#footer-widgets .uams-recent svg path,
+#footer-widgets .uams-top-posts svg path,
+#footer-widgets .uams-widget-related-posts svg path,
 #footer-widgets .uams-widget-rss svg path {
 	fill: #bdbdbd;
 }
@@ -230,11 +230,67 @@ background-size: 410px;
 .leaflet-icon [class*="fa"] {
 	margin-top: 25%;
 }
+/* Modal */
+/* needed for old browsers */
+dialog {
+  display: block;
+}
+/* removes scroll when modal is opened */
+.no-scroll {
+  overflow: hidden;
+}
+.modal {
+  position: fixed;
+  left: 25%;
+  right: auto;
+  top: 25%;
+  width: 50%;
+  margin: 0 auto;
+  border: 1px solid #212121;
+  background: #fff;
+  z-index: 667;
+  padding: 2em;
+}
+.modal-close {
+  float: right;
+  background: #9d2235;
+  color: #fff;
+  padding: .25em;
+  text-decoration: none;
+  line-height: 1.2;
+  text-align: center;
+}
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background: #000;
+  opacity: .6;
+  z-index: 666;
+  cursor: pointer;
+}
+.modal-close:focus,
+.modal-close:hover,
+.modal-close:active {
+  background: #7b1d2a;
+}
+/* Docscores */
+.text-center span.ds-stars {
+	margin: auto;
+}
 @media (max-width: 992px) {
 	.ds-summary {
 		margin-bottom: 10px;
 	    padding-bottom: 10px;
 	    border-bottom: 1px dotted #ccc;
+	}
+	.modal {
+	    left: 5%;
+	    top: 5%;
+	    bottom: 5%;
+	    width: 90%;
 	}
 }
 @media only screen and (max-width: 991px) and (min-width: 769px) {
@@ -273,6 +329,12 @@ background-size: 410px;
 	.flexible-widgets .widget {
 		padding-left: 0;
 		padding-right: 0;
+	}
+	.modal {
+	    left: 1%;
+	    top: 1%;
+	    max-width: 98%;
+	    bottom: 1%;
 	}
 }
 @media only screen and (max-width: 360px) {

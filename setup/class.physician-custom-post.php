@@ -204,16 +204,16 @@ function create_clinical_conditions_taxonomy() {
 // first do the translations part for GUI
 
   $labels = array(
-		'name'                           => 'Conditions & Treatments',
-		'singular_name'                  => 'Condition',
-		'search_items'                   => 'Search Conditions',
-		'all_items'                      => 'All Conditions & Treatments',
+		'name'                           => 'Conditions and Treatments',
+		'singular_name'                  => 'Conditions and Treatments',
+		'search_items'                   => 'Search Conditions and Treatments',
+		'all_items'                      => 'All Conditions and Treatments',
 		'edit_item'                      => 'Edit Condition',
-		'update_item'                    => 'Update Condition / Treatment',
-		'add_new_item'                   => 'Add New Condition / Treatment',
-		'new_item_name'                  => 'New Condition / Treatment',
-		'menu_name'                      => 'Conditions',
-		'view_item'                      => 'View Condition / Treatment',
+		'update_item'                    => 'Update Condition',
+		'add_new_item'                   => 'Add New Condition',
+		'new_item_name'                  => 'New Condition',
+		'menu_name'                      => 'Conditions and Treatments',
+		'view_item'                      => 'View Condition',
 		'popular_items'                  => 'Popular Condition',
 		'separate_items_with_commas'     => 'Separate conditions with commas',
 		'add_or_remove_items'            => 'Add or remove conditions',
@@ -237,7 +237,7 @@ function create_clinical_conditions_taxonomy() {
 		'assign_terms'               => 'edit_physicians',
 	);
 	$args = array(
-		'label' 					 => __( 'Conditions' ),
+		'label' 					 => __( 'Conditions and Treatments' ),
 		'labels'                     => $labels,
 		'hierarchical'               => true,
 		'public'                     => true,
@@ -1040,18 +1040,18 @@ function create_education_taxonomy() {
 add_action( 'init', 'create_education_taxonomy', 0 );
 
 function add_roles_on_plugin_activation() {
-       add_role( 'doc_editor', 'Doc Profile Editor', 
+       add_role( 'doc_editor', 'Doc Profile Editor',
        		array( 	'read' => true,
-       				'read_physician' => true, 
-       				'edit_physicians' => true, 
-       				'edit_published_physicians' => true, 
-       				'read_location' => true, 
-       				'read_private_locations' => true, 
-       				'edit_locations' => true, 
-       				'edit_published_locations' => true,  
-       				'upload_files' => true, 
-       				'edit_files' => true 
-       			) 
+       				'read_physician' => true,
+       				'edit_physicians' => true,
+       				'edit_published_physicians' => true,
+       				'read_location' => true,
+       				'read_private_locations' => true,
+       				'edit_locations' => true,
+       				'edit_published_locations' => true,
+       				'upload_files' => true,
+       				'edit_files' => true
+       			)
        	);
    }
 register_activation_hook( __FILE__, 'add_roles_on_plugin_activation' );
@@ -1117,8 +1117,8 @@ function acf_hide_title() {
 
 /**
  * Changes strings referencing Featured Images for a post type
- * 
- * In this example, the post type in the filter name is "employee" 
+ *
+ * In this example, the post type in the filter name is "employee"
  * and the new reference in the labels is "headshot".
  *
  * @see 	https://developer.wordpress.org/reference/hooks/post_type_labels_post_type/
@@ -1180,7 +1180,7 @@ function get_physician_meta($object) {
 		$data['physician_locations'][$location]['location_address_1'] = get_post_meta( $location, 'location_address_1', true );
 		$data['physician_locations'][$location]['location_address_2'] = get_post_meta( $location, 'location_address_2', true );
 		$data['physician_locations'][$location]['location_city'] = get_post_meta( $location, 'location_city', true );
-		$data['physician_locations'][$location]['location_state'] = get_post_meta( $location, 'location_state', true ); 
+		$data['physician_locations'][$location]['location_state'] = get_post_meta( $location, 'location_state', true );
 		$data['physician_locations'][$location]['location_zip'] =  get_post_meta( $location, 'location_zip', true );
 		$data['physician_locations'][$location]['location_phone'] = get_post_meta( $location, 'location_phone', true );
 		$data['physician_locations'][$location]['location_fax'] = get_post_meta( $location, 'location_fax', true );

@@ -20,29 +20,12 @@
 		  ?>
 
 	      <div id='main_content' class="uams-body-copy" tabindex="-1">
-			<style>
-				.whitetext {color: #fff;}
-				.leaflet-icon div {
-					text-align: center;
-					border: none;
-					font-size: 15px;
-					font-weight: 700;
-					line-height: 1.8em;
-					background-repeat: no-repeat;
-					background-position: center;
-					width: 100%;
-					height: 100%;
-				}
-				.leaflet-icon [class*="fa"] {
-					margin-top: 25%;
-				}
-			</style>
 			<!-- <script type="text/javascript">
-			
+
 			</script> -->
 
 		    <div class="margin-bottom-one search-box-lg"><?php echo do_shortcode( '[wpdreams_ajaxsearchpro id=1]' ); ?></div>
-		    <?php while ( have_posts() ) : the_post(); ?>	    	
+		    <?php while ( have_posts() ) : the_post(); ?>
 		    	<div class="row">
 			    	<div class="col-md-6">
 			    		<h1><?php the_title(); ?></h1>
@@ -50,22 +33,37 @@
 					        <p><?php echo rwmb_meta('location_address_1', $args, get_the_ID() ); ?><br/>
 					            <?php echo ( rwmb_meta('location_address_2', $args ) ? rwmb_meta('location_address_2', $args) . '<br/>' : ''); ?>
 					            <?php echo rwmb_meta('location_city', $args); ?>, <?php echo rwmb_meta('location_state', $args); ?> <?php echo rwmb_meta('location_zip', $args, get_the_ID()); ?><br/>
-					            <?php echo rwmb_meta('location_phone', $args); ?>
+					            <?php echo rwmb_meta('location_phone', $args) ? '<a href="tel:'. rwmb_meta('location_phone', $args) . '" class="icon-phone">' . rwmb_meta('location_phone', $args) . '</a>' : ''; ?>
 					            <?php echo ( rwmb_meta('location_fax', $args) ? '<br/>Fax: ' . rwmb_meta('location_fax', $args) . '' : ''); ?>
-					            <?php echo ( rwmb_meta('location_email', $args ) ? '<br/><a href="mailto:"' . rwmb_meta('location_email', $args ) . '">' . rwmb_meta('location_email', $args ) . '</a>' : ''); ?></p>
-					            
+					            <?php echo ( rwmb_meta('location_email', $args ) ? '<br/><a href="mailto:"' . rwmb_meta('location_email', $args ) . '" class="icon-email">' . rwmb_meta('location_email', $args ) . '</a>' : ''); ?></p>
+
 					            <?php echo ( rwmb_meta('location_web_name', $args ) ? '<p><a class="uams-btn btn-blue btn-sm" href="' . rwmb_meta( 'location_url', $args ) . '" title="'. rwmb_meta('location_web_name', $args ) . '">Clinic Webpage</a></p>' : ''); ?>
 					            <p><a class="uams-btn btn-red btn-sm btn-external" href="https://www.google.com/maps/dir/Current+Location/<?php echo $map['latitude'] ?>,<?php echo $map['longitude'] ?>" target="_blank">Get Directions</a>
 					        </p>
-					        <?php echo ( rwmb_meta('location_appointments', $args ) ? '<h3>Appointments</h3><p>' . rwmb_meta('location_appointments', $args) . '</p>' : ''); ?>
+					        <?php
+						        $phone_numbers = rwmb_meta('location_appointments');
+						        if ( ! empty( $phone_numbers ) && ! empty( $phone_numbers[0]['number'] ) ) {
+							        echo '<h3>Additional Phone Numbers:</h3>';
+								    foreach ( $phone_numbers as $phone_number ) {
+									    if (! empty($phone_number['text']) && ! empty($phone_number['number']) ) {
+								        	echo '<p><strong>' . $phone_number['text'] . '</strong>: <a href="tel:'. $phone_number['number'] .'" class="icon-phone">'. $phone_number['number'] .'</a> ' . $phone_number['after'] .'</p>'; // Display sub-field value
+								        }
+								    }
+								}
+						        //echo ( rwmb_meta('location_appointments', $args ) ? '<h3>Additional Phone Numbers:</h3><p>' . rwmb_meta('location_appointments', $args) . '</p>' : ''); ?>
 							<h3>Hours of Operation</h3>
-					        <?php echo '<p>Mon: ' . ( rwmb_meta('location_mon_open', $args ) && "00:00:00" != rwmb_meta('location_mon_open', $args ) ? '' . rwmb_meta('location_mon_open', $args) . ' - ' . rwmb_meta('location_mon_close', $args) . '' : 'Closed') . '</p>'; ?>
-							<?php echo '<p>Tues: ' . ( rwmb_meta('location_tues_open', $args ) && "00:00:00" != rwmb_meta('location_tues_open', $args ) ? '' . rwmb_meta('location_tues_open', $args) . ' - ' . rwmb_meta('location_tues_close', $args) . '' : 'Closed') . '</p>'; ?>	
-							<?php echo '<p>Wed: ' . ( rwmb_meta('location_wed_open', $args ) && "00:00:00" != rwmb_meta('location_wed_open', $args ) ? '' . rwmb_meta('location_wed_open', $args) . ' - ' . rwmb_meta('location_wed_close', $args) . '' : 'Closed') . '</p>'; ?>	
-							<?php echo '<p>Thur: ' . ( rwmb_meta('location_thurs_open', $args ) && "00:00:00" != rwmb_meta('location_thurs_open', $args ) ? '' . rwmb_meta('location_thurs_open', $args) . ' - ' . rwmb_meta('location_thurs_close', $args) . '' : 'Closed') . '</p>'; ?>	
-							<?php echo '<p>Fri: ' . ( rwmb_meta('location_fri_open', $args ) && "00:00:00" != rwmb_meta('location_fri_open', $args ) ? '' . rwmb_meta('location_fri_open', $args) . ' - ' . rwmb_meta('location_fri_close', $args) . '' : 'Closed') . '</p>'; ?>	
-							<?php echo '<p>Sat: ' . ( rwmb_meta('location_sat_open', $args ) && "00:00:00" != rwmb_meta('location_sat_open', $args ) ? '' . rwmb_meta('location_sat_open', $args) . ' - ' . rwmb_meta('location_sat_close', $args) . '' : 'Closed') . '</p>'; ?>	
-							<?php echo '<p>Sun: ' .( rwmb_meta('location_sun_open', $args ) && "00:00:00" != rwmb_meta('location_sun_open', $args ) ? '' . rwmb_meta('location_sun_open', $args) . ' - ' . rwmb_meta('location_sunn_close', $args) . '' : 'Closed') . '</p>'; ?>	
+							<?php
+								if (rwmb_meta('location_24_7', $args)):
+									echo 'Open 24/7';
+								else:
+						        	echo '<p>Mon: ' . ( rwmb_meta('location_mon_open', $args ) && "00:00:00" != rwmb_meta('location_mon_open', $args ) ? '' . rwmb_meta('location_mon_open', $args) . ' - ' . rwmb_meta('location_mon_close', $args) . '' : 'Closed') . '</p>';
+							        echo '<p>Tues: ' . ( rwmb_meta('location_tues_open', $args ) && "00:00:00" != rwmb_meta('location_tues_open', $args ) ? '' . rwmb_meta('location_tues_open', $args) . ' - ' . rwmb_meta('location_tues_close', $args) . '' : 'Closed') . '</p>';
+								    echo '<p>Wed: ' . ( rwmb_meta('location_wed_open', $args ) && "00:00:00" != rwmb_meta('location_wed_open', $args ) ? '' . rwmb_meta('location_wed_open', $args) . ' - ' . rwmb_meta('location_wed_close', $args) . '' : 'Closed') . '</p>';
+									echo '<p>Thur: ' . ( rwmb_meta('location_thurs_open', $args ) && "00:00:00" != rwmb_meta('location_thurs_open', $args ) ? '' . rwmb_meta('location_thurs_open', $args) . ' - ' . rwmb_meta('location_thurs_close', $args) . '' : 'Closed') . '</p>';
+									echo '<p>Fri: ' . ( rwmb_meta('location_fri_open', $args ) && "00:00:00" != rwmb_meta('location_fri_open', $args ) ? '' . rwmb_meta('location_fri_open', $args) . ' - ' . rwmb_meta('location_fri_close', $args) . '' : 'Closed') . '</p>';
+									echo '<p>Sat: ' . ( rwmb_meta('location_sat_open', $args ) && "00:00:00" != rwmb_meta('location_sat_open', $args ) ? '' . rwmb_meta('location_sat_open', $args) . ' - ' . rwmb_meta('location_sat_close', $args) . '' : 'Closed') . '</p>';
+									echo '<p>Sun: ' .( rwmb_meta('location_sun_open', $args ) && "00:00:00" != rwmb_meta('location_sun_open', $args ) ? '' . rwmb_meta('location_sun_open', $args) . ' - ' . rwmb_meta('location_sunn_close', $args) . '' : 'Closed') . '</p>';
+								endif; ?>
 			    	</div>
 			    	<div class="col-md-6 margin-bottom-two">
 			    		<?php if ( has_post_thumbnail() ) { ?>
@@ -77,7 +75,7 @@
 							if( !empty($map) ):
 							?>
 							<!-- <div class="acf-map">
-							<?php 
+							<?php
 							// $args = array(
 							// 	'width'        => '100%',
 							// 	'height'       => '480px',
@@ -100,9 +98,9 @@
 								<script type='text/javascript'>
 									/*-- Function to create encode SVG  --*/
 									/* colors needd to be hex code without # */
-									// createSVGIcon("9d2235", "222", "whitetext", "1"); 
+									// createSVGIcon("9d2235", "222", "whitetext", "1");
 									var createSVGIcon = function(fillColor,strokeColor,labelClass,labelText) {
-										var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19 27.77" aria-labelledby="pinTitle" role="img"><title id="mapTitle">Basic Map Pin</title><path d="M9.5,26.26l.57-.65c.29-.4,7.93-9.54,7.93-15.67A8.75,8.75,0,0,0,9.5,1,8.75,8.75,0,0,0,1,9.94c0,6,7.54,15.27,7.93,15.67l.57.65Z" fill="#'+ fillColor +'" stroke="#'+ strokeColor +'" stroke-miterlimit="10" stroke-width="1"/></svg>';      
+										var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19 27.77" aria-labelledby="pinTitle" role="img"><title id="mapTitle">Basic Map Pin</title><path d="M9.5,26.26l.57-.65c.29-.4,7.93-9.54,7.93-15.67A8.75,8.75,0,0,0,9.5,1,8.75,8.75,0,0,0,1,9.94c0,6,7.54,15.27,7.93,15.67l.57.65Z" fill="#'+ fillColor +'" stroke="#'+ strokeColor +'" stroke-miterlimit="10" stroke-width="1"/></svg>';
 										var encoded = window.btoa(svg);
 										var backgroundImage = "background-image: url(data:image/svg+xml;base64,"+encoded+")";
 										return '<div style="'+ backgroundImage +'" class="'+ labelClass +'">'+ labelText +'</div>';
@@ -110,7 +108,7 @@
 									/* Function to create divIcon for leaflet map */
 									// createLabelIcon("leaflet-icon","A");
 									var createLabelIcon = function(labelClass,labelText){
-										return L.divIcon({ 
+										return L.divIcon({
 											className: labelClass,
 											html: labelText,
 											iconSize: new L.Point(28, 41),
@@ -125,14 +123,14 @@
 									var bing = new L.BingLayer("AnCRy0VpPMDzYT6rOBqqqCNvNbUWvdSOv8zrQloRCGFnJZU28JK3c6cQkCMAHtCd", {type: imagerySet});
 									map.addLayer(bing);
 									/* [lat, lon, fillColor, strokeColor, labelClass, iconText, popupText] */
-									var markers = [  
+									var markers = [
 										// example [ 34.74376029995541, -92.31828863640054, "00F","000","white","A","I am a blue icon." ],
-										[ <?php echo $map['latitude']; ?>, <?php echo $map['longitude'] ?>, "9d2235","222", "white", '<?php echo (rwmb_meta('location_facility', $args )) ? '<i class="fas fa-hospital-symbol"></i>' : ((rwmb_meta('location_clinic', $args )) ? '<i class="fas fa-notes-medical"></i>' :'<i class="fas fa-circle fa-sm"></i>'); ?>', "" ]
+										[ <?php echo $map['latitude']; ?>, <?php echo $map['longitude'] ?>, "9d2235","222", "transparentwhite", '<i class="fas fa-circle fa-sm"></i>', "" ]
 									]
 									//Loop through the markers array
 									var markerArray = [];
 									for (var i=0; i<markers.length; i++) {
-									
+
 										var lat = markers[i][0];
 										var lon = markers[i][1];
 										var fillColor = markers[i][2];
@@ -159,7 +157,7 @@
 					</div><!-- .col -->
 			   	</div><!-- .row -->
 			   	<?php $specialties = rwmb_meta('medical_specialties');
-			   		if( $specialties ): 
+			   		if( $specialties ):
 			   		$specialtiescols = partition( $specialties, 3 ); ?>
 					<h3>Specialties at this Location</h3>
 					<div class="row">
@@ -169,15 +167,51 @@
 						 	foreach( $specialtiescols[$i] as $specialty ):
 							 $specialty_name = get_term( $specialty, 'specialty');
 								echo $specialty_name->name . '<br/>';
-						 	endforeach; ?>     	
+						 	endforeach; ?>
+			    		</div>
+			    		<?php } // endfor?>
+			    	</div>
+			    <?php endif; ?>
+			    <?php
+				    $physicians = array();
+				    $connected = new WP_Query( array(
+						    'relationship' => array(
+						        'id' => 'physicians_to_locations',
+						        'to' => get_the_ID(), // You can pass object ID or full object
+						    ),
+						    'nopaging'     => true,
+
+						) );
+
+					while ( $connected->have_posts() ) : $connected->the_post();
+					    $full_name = rwmb_meta('physician_first_name') .' ' .(rwmb_meta('physician_middle_name') ? rwmb_meta('physician_middle_name') . ' ' : '') . rwmb_meta('physician_last_name') . (rwmb_meta('physician_degree') ? ', ' . rwmb_meta('physician_degree') : '');
+					    $physicians[get_post_meta(get_the_ID(), 'physician_full_name_meta', true)] = '<a href="'. get_the_permalink() .'">'. $full_name .'</a>';
+					endwhile;
+					ksort($physicians);
+					$count = count($physicians);
+					$c = 3;
+					if ($count < 6) {
+						$c = 2;
+					}
+					wp_reset_postdata();
+			   		if( $physicians ):
+			   		$physiciancols = partition( $physicians, $c ); ?>
+					<h3>Physicians at this Location</h3>
+					<div class="row">
+						<?php for ( $i = 0 ; $i < $c ; $i++ ) { ?>
+			    		<div class="col-md-<?php echo (12 / $c); ?>">
+						<?php
+						 	foreach( $physiciancols[$i] as $physician ):
+								echo $physician . '<br/>';
+						 	endforeach; ?>
 			    		</div>
 			    		<?php } // endfor?>
 			    	</div>
 			    <?php endif; ?>
 		    <?php endwhile; // end of the loop. ?>
-			    	
+
 		</div>
-<?php wp_reset_query(); ?>
+		<?php wp_reset_query(); ?>
 	</div>
 
     <div id="sidebar"></div>
