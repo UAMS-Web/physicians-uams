@@ -280,6 +280,14 @@ dialog {
 .text-center span.ds-stars {
 	margin: auto;
 }
+.star-rating span.ds-stars {
+	display: inline-block; /* Override default Block */
+}
+.ds-average-max {
+	font-weight: inherit !important;
+	color: inherit !important;
+}
+.ds-ratingcount, .ds-commentcount { font-weight: bold; }
 @media (max-width: 992px) {
 	.ds-summary {
 		margin-bottom: 10px;
