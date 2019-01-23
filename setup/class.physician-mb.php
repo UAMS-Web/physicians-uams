@@ -201,7 +201,7 @@ function uams_physicians_register_meta_boxes( $meta_boxes ) {
             'title' => 'Regional',
           ),
           'columns' => 3,
-          'visible' => array( $post_ID, '=', 1 ),
+          //'visible' => array( $post_ID, '=', 1 ),
         ),
         array(
             'id'   => 'physician_full_name',
@@ -212,13 +212,46 @@ function uams_physicians_register_meta_boxes( $meta_boxes ) {
         ),
 
         /* Clinical Profile Tab */
+        // array (
+        //   'id' => 'physician_title',
+        //   'type' => 'text',
+        //   'name' => 'Title',
+        //   'tab' => 'tab_clin_profile',
+        //   'label_description' => 'Main Title',
+        //   'columns' => 12,
+        // ),
+
         array (
-          'id' => 'physician_title',
-          'type' => 'text',
-          'name' => 'Title',
+          'id' => 'physician_clinical_title',
+          'name' => 'Clinical Job Title',
+          'desc' => 'General Title for Patients / Public',
+          'type' => 'taxonomy',
+          'taxonomy' => 'clinical_title',
+          'field_type' => 'select_advanced',
+          // 'multiple'    => true,
+          'columns' => 6,
           'tab' => 'tab_clin_profile',
-          'label_description' => 'Main Title',
-          'columns' => 12,
+          'placeholder' => 'Select Title',
+          'js_options'      => array(
+            'width' => '100%',
+          ),
+        ),
+
+        array (
+          'id' => 'physician_department',
+          'name' => 'Medical Department',
+          //'desc' => 'General Title for Patients / Public',
+          'type' => 'taxonomy',
+          'taxonomy' => 'department',
+          'field_type' => 'select_advanced',
+          // 'multiple'    => true,
+          'columns' => 6,
+          'tab' => 'tab_clin_profile',
+          // 'std' => '167', // English
+          'placeholder' => 'Select Department',
+          'js_options'      => array(
+            'width' => '100%',
+          ),
         ),
 
         array (
@@ -393,21 +426,21 @@ function uams_physicians_register_meta_boxes( $meta_boxes ) {
           'tab' => 'tab_clin_details',
         ),
 
-        array (
-          'id' => 'medical_procedures',
-          'type' => 'taxonomy',
-          'name' => 'Medical Procedures',
-          'label_description' => 'Not used',
-          'taxonomy' => 'medical_procedures',
-          'field_type' => 'select_advanced',
-          'placeholder' => 'Select an Item',
-          'multiple'    => true,
-          'js_options'      => array(
-            'width' => '100%',
-          ),
-          'columns' => 12,
-          'tab' => 'tab_clin_details',
-        ),
+        // array (
+        //   'id' => 'medical_procedures',
+        //   'type' => 'taxonomy',
+        //   'name' => 'Medical Procedures',
+        //   'label_description' => 'Not used',
+        //   'taxonomy' => 'medical_procedures',
+        //   'field_type' => 'select_advanced',
+        //   'placeholder' => 'Select an Item',
+        //   'multiple'    => true,
+        //   'js_options'      => array(
+        //     'width' => '100%',
+        //   ),
+        //   'columns' => 12,
+        //   'tab' => 'tab_clin_details',
+        // ),
 
         array (
           'id' => 'medical_terms',
