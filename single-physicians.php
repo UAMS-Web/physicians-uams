@@ -83,8 +83,8 @@
 										// echo '<div class="ds-title">Patient Rating</div>';
 										echo '<div><span class="ds-stars ds-stars'. $data->profile->averageStarRatingStr .'"></span> <span class="ds-average" itemprop="ratingValue"> '. $data->profile->averageRatingStr .'</span><span class="ds-average-max">out of 5</span></div>';
 										// echo '<div class="ds-xofy"></div>';
-										echo '<div class="ds-ratings"><a href="#PatientRatings" title="Patient Ratings"><span class="ds-ratingcount" itemprop="ratingCount">'. $data->profile->reviewcount .'</span> Patient Satisfaction Ratings</a></div>';
-										echo '<div class="ds-comments2"><a href="#PatientRatings" title="Patient Ratings"><span class="ds-commentcount" itemprop="reviewCount">'. $data->profile->bodycount .'</span> Patient Comments</a></div>';
+										echo '<div class="ds-ratings"><a href="#tab-overview" title="Patient Ratings" class="js-link-to-tab"><span class="ds-ratingcount" itemprop="ratingCount">'. $data->profile->reviewcount .'</span> Patient Satisfaction Ratings</a></div>';
+										echo '<div class="ds-comments2"><a href="#tab-overview" class="js-link-to-tab" title="Patient Ratings"><span class="ds-commentcount" itemprop="reviewCount">'. $data->profile->bodycount .'</span> Patient Comments</a></div>';
 	 									echo '</div>';
 										//echo '<a href="' . esc_url( $rating->info->link ) . '">' . $product->info->title . '</a>';
 									} else { ?>
@@ -580,10 +580,12 @@
 			</div>
 
 		    </div><!-- #Physician Schema -->
-			<script src="<?php echo get_stylesheet_directory_uri(); ?>/assets/js/jquery-accessible-modal-window-aria.js"></script>
+			<?php if ( ! rwmb_meta('physician_npi') || ! $rating_valid ) { ?>
+			<script src="<?php echo get_stylesheet_directory_uri(); ?>/assets/js/jquery-modal.min.js"></script>
 			<div id="why_not_modal" class="hidden">
 				There is no publicly available rating for this medical professional for one of two reasons: 1) he or she does not see patients or 2) he or she sees patients but has not yet received the minimum number of Patient Satisfaction Reviews. To be eligible for display, we require a minimum of 30 surveys. This ensures that the rating is statistically reliable and a true reflection of patient satisfaction.
 			</div>
+			<?php } ?>
 		  </div><!-- #main_content -->
 
     	</div><!-- uams-content -->
