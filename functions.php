@@ -503,7 +503,7 @@ add_action( 'mb_relationships_init', function() {
             'admin_column' => 'after title',
             'meta_box'    => array(
                 'title'       => 'Location(s)',
-                'field_title' => 'Select Location',
+                'field_title' => 'Select Location(s)<br/><span style="font-weight:normal; font-style:italic;">Set Primary Location First</span>',
                 'context' => 'normal',
                 'priority' => 'high',
             ),

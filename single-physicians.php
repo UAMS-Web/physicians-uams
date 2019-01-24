@@ -30,32 +30,43 @@
 	      <div id='main_content' class="uams-body-copy" tabindex="-1">
 		    <div itemscope itemtype="http://schema.org/Physician">
 			<div class="margin-bottom-one search-box-lg"><?php echo do_shortcode( '[wpdreams_ajaxsearchpro id=1]' ); ?></div>
-	        <div class="row">
-		        <div class="col-md-8">
-	                <h1 class="title-heading-left" data-fontsize="34" data-lineheight="48"><?php echo rwmb_meta('physician_first_name'); ?> <?php echo (rwmb_meta('physician_middle_name') ? rwmb_meta('physician_middle_name') : ''); ?> <?php echo rwmb_meta('physician_last_name'); ?><?php echo (rwmb_meta('physician_degree') ? ', ' . rwmb_meta('physician_degree') : ''); ?></h1>
-	                    <?php echo (rwmb_meta('physician_title') ? '<h4>' . rwmb_meta('physician_title') .'</h4>' : ''); ?>
-	            </div>
-				<div class="col-md-4 margin-bottom-two">
-	                <div>
-	                    <a class="uams-btn btn-lg" target="_self" title="Make an Appointment" href="<?php echo rwmb_meta('physician_appointment_link'); ?>">Make an Appointment</a>
-	                </div>
-	            </div>
-	        </div>
 			<div class="row">
+				<div class="col-md-9 col-sm-12 col-xs-12" style="float:right;">
+					<div class="row">
+						<div class="col-md-8">
+							<h2 class="title-heading-left margin-top-none"><?php echo rwmb_meta('physician_first_name'); ?> <?php echo (rwmb_meta('physician_middle_name') ? rwmb_meta('physician_middle_name') : ''); ?> <?php echo rwmb_meta('physician_last_name'); ?><?php echo (rwmb_meta('physician_degree') ? ', ' . rwmb_meta('physician_degree') : ''); ?></h2>
+								<?php //echo (rwmb_meta('physician_clinical_title') ? '<h4>' . rwmb_meta('physician_clinical_title') .'</h4>' : ''); ?>
+								<?php
+									if(! empty( rwmb_meta('physician_clinical_title') ) || ! empty( rwmb_meta('physician_department') ) ){
+										echo '<h4>';
+										echo (rwmb_meta('physician_clinical_title') ? rwmb_meta('physician_clinical_title')->name : '');
+										echo ((! empty( rwmb_meta('physician_clinical_title') )) && (! empty( rwmb_meta('physician_department') ) ) ? ', ' : '' );
+										echo (rwmb_meta('physician_department') ? rwmb_meta('physician_department')->name : '');
+										echo '</h4>';
+									}
+								?>
+						</div>
+						<div class="col-md-4 margin-bottom-two">
+							<div>
+								<a class="uams-btn btn-md" target="_self" title="Make an Appointment" href="<?php echo rwmb_meta('physician_appointment_link'); ?>">Make an Appointment</a>
+							</div>
+						</div>
+					</div>
+				</div>
 				<div class="col-md-3">
-	                <div class="margin-bottom-two">
-		                <span  itemprop="name" class="hidden"><?php echo rwmb_meta('physician_first_name'); ?> <?php echo (rwmb_meta('physician_middle_name') ? rwmb_meta('physician_middle_name') : ''); ?> <?php echo rwmb_meta('physician_last_name'); ?><?php echo (rwmb_meta('physician_degree') ? ', ' . rwmb_meta('physician_degree') : ''); ?></span>
-	                    <?php the_post_thumbnail( 'medium',  array( 'itemprop' => 'image' ) ); ?>
-	                </div>
-<?php if(rwmb_meta('physician_youtube_link')) { ?>
-	                <div>
-	                    <a class="uams-btn btn-red btn-play btn-md" target="_self" title="Watch Video" href="<?php echo rwmb_meta('physician_youtube_link'); ?>">Watch Video</a>
-	                </div>
-<?php } ?>
-	                <div>
-	                    <a class="uams-btn btn-blue btn-plus btn-md" target="_self" title="Visit MyChart" href="https://mychart.uamshealth.com/">MyChart</a>
-	                </div>
-	                <?php
+					<div class="row">
+						<div class="col-sm-4 col-md-12 margin-bottom-one">
+							<span  itemprop="name" class="hidden"><?php echo rwmb_meta('physician_first_name'); ?> <?php echo (rwmb_meta('physician_middle_name') ? rwmb_meta('physician_middle_name') : ''); ?> <?php echo rwmb_meta('physician_last_name'); ?><?php echo (rwmb_meta('physician_degree') ? ', ' . rwmb_meta('physician_degree') : ''); ?></span>
+	                    	<?php the_post_thumbnail( 'medium',  array( 'itemprop' => 'image' ) ); ?>
+							<div class="margin-top-one">
+							<?php if(rwmb_meta('physician_youtube_link')) { ?>
+								<a class="uams-btn btn-red btn-play btn-md" target="_self" title="Watch Video" href="<?php echo rwmb_meta('physician_youtube_link'); ?>">Watch Video</a>
+							<?php } ?>							
+								<a class="uams-btn btn-blue btn-plus btn-md" target="_self" title="Visit MyChart" href="https://mychart.uamshealth.com/">MyChart</a>
+							</div>
+						</div>
+						<div class="col-sm-8 col-md-12">
+	                	<?php
 			                if(rwmb_meta('physician_npi')) {
 
 								$npi =  rwmb_meta( 'physician_npi' );
@@ -68,62 +79,72 @@
 									$rating_valid = $data->valid;
 
 									if ( $rating_valid ){
-	 									echo '<div class="text-center">';
-										echo '<div class="ds-title">Patient Rating</div>';
-										echo '<div><span class="ds-stars ds-stars'. $data->profile->averageStarRatingStr .'"></span></div>';
-										echo '<div class="ds-xofy"><span class="ds-average">'. $data->profile->averageRatingStr .'</span><span class="ds-average-max">out of 5</span></div>';
-										echo '<div class="ds-ratings"><span class="ds-ratingcount">'. $data->profile->reviewcount .'</span> Ratings</div>';
-										echo '<div class="ds-comments"><span class="ds-commentcount">'. $data->profile->bodycount .'</span> Comments</div>';
+	 									echo '<div class="star-rating" itemprop="aggregateRating" itemscope="" itemtype="https://schema.org/AggregateRating">';
+										// echo '<div class="ds-title">Patient Rating</div>';
+										echo '<div><span class="ds-stars ds-stars'. $data->profile->averageStarRatingStr .'"></span> <span class="ds-average" itemprop="ratingValue"> '. $data->profile->averageRatingStr .'</span><span class="ds-average-max">out of 5</span></div>';
+										// echo '<div class="ds-xofy"></div>';
+										echo '<div class="ds-ratings"><a href="#tab-overview" title="Patient Ratings" class="js-link-to-tab"><span class="ds-ratingcount" itemprop="ratingCount">'. $data->profile->reviewcount .'</span> Patient Satisfaction Ratings</a></div>';
+										echo '<div class="ds-comments2"><a href="#tab-overview" class="js-link-to-tab" title="Patient Ratings"><span class="ds-commentcount" itemprop="reviewCount">'. $data->profile->bodycount .'</span> Patient Comments</a></div>';
 	 									echo '</div>';
 										//echo '<a href="' . esc_url( $rating->info->link ) . '">' . $product->info->title . '</a>';
 									} else { ?>
-										<div class="text-center">
-										<div class="ds-title">Patient Rating</div>
-										<div><span class="ds-stars ds-stars0"></span></div>
-										<div class="small bold">No Patient Satisfaction Reviews</div>
+										<div class="">
+										<!-- <div class="ds-title">Patient Rating</div> -->
+										<div><span class="ds-stars ds-stars0"></span> No ratings</div>
+										<div class="small bold">0 Patient Satisfaction Ratings<br/>0 Patient Comments</div>
 										<div><a href="#" class="js-modal" data-modal-close-text="Close" data-modal-close-title="Close this window" data-modal-content-id="why_not_modal" data-modal-title="Why Not?">Why Not?</a></div>
 										</div>
 									<?php
 									}
 								}
 							} else { ?>
-								<div class="text-center">
-								<div class="ds-title">Patient Rating</div>
-								<div><span class="ds-stars ds-stars0"></span></div>
-								<div class="small bold">No Patient Satisfaction Reviews</div>
+								<div class="">
+								<!-- <div class="ds-title">Patient Rating</div> -->
+								<div><span class="ds-stars ds-stars0"></span> No ratings</div>
+								<div class="small"><strong>0</strong> Patient Satisfaction Ratings<br/><strong>0</strong> Patient Comments</div>
 								<div><a href="#" class="js-modal" data-modal-close-text="Close" data-modal-close-title="Close this window" data-modal-content-id="why_not_modal" data-modal-title="Why Not?">Why Not?</a></div>
 								</div>
 						<?php }
 
-						$locations = new WP_Query( array(
+						$location = new WP_Query( array(
 						    'relationship' => array(
 						        'id'   => 'physicians_to_locations',
 						        'from' => get_the_ID(), // You can pass object ID or full object
-						    ),
-						    'nopaging'     => true,
+							),
+							'posts_per_page' => 2,
+						    //'nopaging'     => true,
 						) );
-
-						if( $locations ): ?>
-						<h3 data-fontsize="16" data-lineheight="24"><i class="fa fa-medkit"></i> Clinic(s)</h3>
-							<ul>
-							<?php while ( $locations->have_posts() ) : $locations->the_post(); ?>
-								<li>
-									<a href="<?php echo get_permalink( ); ?>">
-										<?php echo get_the_title( ); ?>
-									</a>
-								</li>
+						$l = 1;
+						if( $location ): ?>
+						<h5><i class="fa fa-medkit"></i> Primary Location</h5>
+							<?php while ( $location->have_posts() && ($l < 2) ) : $location->the_post(); ?>
+									<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+								    <p><?php echo rwmb_meta('location_address_1', $args, get_the_ID() ); ?><br/>
+								    <?php echo ( rwmb_meta('location_address_2', $args ) ? rwmb_meta('location_address_2', $args) . '<br/>' : ''); ?>
+									<?php echo rwmb_meta('location_city', $args); ?>, <?php echo rwmb_meta('location_state', $args); ?> <?php echo rwmb_meta('location_zip', $args, get_the_ID()); ?>
+									<?php $map = rwmb_get_value('location_map'); ?>
+									<br /><a class="uams-btn btn-red btn-sm btn-external" href="https://www.google.com/maps/dir/Current+Location/<?php echo $map['latitude'] ?>,<?php echo $map['longitude'] ?>" target="_blank">Directions</a>
+									<?php $l++; ?>
 							<?php endwhile;
 								wp_reset_postdata(); ?>
-							</ul>
 						<?php endif; ?>
+						</div>
+					</div>
 	            </div>
 				<div class="col-md-9">
 	                <div class="js-tabs tabs__uams">
 		                <ul class="js-tablist tabs__uams_ul" data-hx="h2">
-			                <?php if(rwmb_meta('physician_clinical_bio')||rwmb_meta('medical_specialties')||rwmb_meta('physician_conditions')||(rwmb_meta('physician_npi') && $rating_valid)): ?>
+			                <?php if(rwmb_meta('medical_specialties')||rwmb_meta('physician_conditions')||(rwmb_meta('physician_npi') && $rating_valid)): ?>
 	                    	<li class="js-tablist__item tabs__uams__li">
 	                    		<a href="#tab-overview" id="label_tab-overview" class="js-tablist__link tabs__uams__a" data-toggle="tab">
 	                            	Overview
+	                            </a>
+	                        </li>
+	                        <?php endif; ?>
+							<?php if(rwmb_meta('physician_clinical_bio')): ?>
+	                    	<li class="js-tablist__item tabs__uams__li">
+	                    		<a href="#tab-about" id="label_tab-about" class="js-tablist__link tabs__uams__a" data-toggle="tab">
+	                            	About
 	                            </a>
 	                        </li>
 	                        <?php endif; ?>
@@ -136,7 +157,7 @@
 	                        <?php endif; ?>
 	                        <li class="js-tablist__item tabs__uams__li">
 	                            <a href="#tab-location" id="label_tab-location" class="js-tablist__link tabs__uams__a" data-toggle="tab">
-		                            Location
+		                            Location<?php echo($l > 1 ? 's' : '');?>
 		                        </a>
 	                        </li>
 	                    <?php if( !empty(rwmb_meta('physician_research_bio')) || !empty(rwmb_meta('physician_research_interests'))): ?>
@@ -146,18 +167,46 @@
 		                        </a>
 	                        </li>
 	                    <?php endif; ?>
-	                    <?php if( !empty (rwmb_meta('physician_awards')) || rwmb_meta('physician_additional_info')): ?>
-	                    	<li class="js-tablist__item tabs__uams__li">
-	                            <a href="#tab-info" id="label_tab-info" class="js-tablist__link tabs__uams__a" data-toggle="tab">
-		                            Additional Info
-		                        </a>
-	                        </li>
-	                    <?php endif; ?>
                         </ul>
                         <div class="uams-tab-content">
 	                        <?php if(rwmb_meta('physician_clinical_bio')||rwmb_meta('medical_specialties')||rwmb_meta('physician_conditions')||(rwmb_meta('physician_npi') && $rating_valid)): ?>
 	                        <div id="tab-overview" class="js-tabcontent tabs__uams__tabcontent">
-			                    <?php echo rwmb_meta('physician_clinical_bio'); ?>
+								<?php echo (rwmb_meta('physician_department') ? '<p><strong>Medical Department</strong>: ' . rwmb_meta('physician_department')->name . '</p>' : ''); ?>
+								<?php echo ('<p><strong>Primary Care</strong>: '. (rwmb_meta('physician_primary_care') ? 'Yes' : 'No') . '</p>'); ?>
+								<?php // load all 'specialties' terms for the post
+									$patients = rwmb_meta('physician_patient_types');
+									if( $patients ): 
+										$numItems = count($patients);
+										$i = 0;
+									?>
+									<p><strong>Patient Type<?php echo($numItems > 1 ? 's' : '');?></strong>: 
+										<?php foreach( $patients as $patient ): ?>
+											<?php $patient_name = get_term( $patient, 'patient_type');
+												echo $patient_name->name;
+												if(++$i !== $numItems) {
+													echo ", ";
+												}
+											?>
+										<?php endforeach; ?>
+									</p>
+								<?php endif; ?>
+								<?php // load all 'specialties' terms for the post
+									$languages = rwmb_meta('physician_languages');
+									if( $languages ): 
+										$numItems = count($languages);
+										$i = 0;
+									?>
+									<p><strong>Language<?php echo($numItems > 1 ? 's' : '');?></strong>: 
+										<?php foreach( $languages as $language ): ?>
+											<?php $language_name = get_term( $language, 'languages');
+												echo $language_name->name;
+												if(++$i !== $numItems) {
+													echo ", ";
+												}
+											?>
+										<?php endforeach; ?>
+									</p>
+								<?php endif; ?>
 			                    <?php // load all 'specialties' terms for the post
 									$specialties = rwmb_meta('medical_specialties');
 
@@ -219,6 +268,26 @@
 									<div class="ds-comments" data-ds-pagesize="10"></div>
                             	</div>
 								<?php } ?>
+							</div>
+						<?php endif; ?>
+						<?php if(rwmb_meta('physician_clinical_bio')||!empty (rwmb_meta('physician_awards')) || rwmb_meta('physician_additional_info')): ?>
+	                        <div id="tab-about" class="js-tabcontent tabs__uams__tabcontent">
+			                    <?php echo rwmb_meta('physician_clinical_bio'); ?>
+							<?php	
+								$awards = rwmb_meta('physician_awards');
+								if(! empty( $awards ) ): ?>
+	                            	<h3>Awards</h3>
+								    <ul>
+								    <?php foreach ( $awards as $award ) { ?>
+								        <li><?php echo $award['award_title']; ?> (<?php echo $award['award_year']; ?>)<?php echo ($award['award_infor'] ? '<br/>' . $award['award_infor'] : ''); ?></li>
+								    <?php } ?>
+								    </ul>
+								<?php endif;
+									if(rwmb_meta('physician_additional_info'))
+									{
+										echo rwmb_meta('physician_additional_info');
+									}
+								?>
 							</div>
 						<?php endif; ?>
 						<?php if(rwmb_meta('physician_academic_appointment')||rwmb_meta('physician_education')||rwmb_meta('physician_boards')||rwmb_meta('physician_publications')||rwmb_meta('physician_pubmed_author_id')||rwmb_meta('physician_research_profiles_link')): ?>
@@ -338,7 +407,7 @@
 										var markers = [
 											// example [ 34.74376029995541, -92.31828863640054, "00F","000","transparentwhite","A","I am a blue icon." ],
 											<?php $i = 1; ?>
-											<?php while ( $locations->have_posts() ) : $locations->the_post(); // variable must be called $post (IMPORTANT) ?>
+											<?php while ( $physician_locations->have_posts() ) : $physician_locations->the_post(); // variable must be called $post (IMPORTANT) ?>
 											<?php $map = rwmb_get_value('location_map'); ?>
 											[ <?php echo $map['latitude']; ?>, <?php echo $map['longitude'] ?>, "9d2235","222", "transparentwhite", "<?php echo $i ?>", '<strong><?php the_title() ?></strong><br /><a href="https://www.google.com/maps/dir/Current+Location/<?php echo $map["latitude"] ?>,<?php echo $map["longitude"] ?>" target="_blank">Directions</a>' ],
 											<?php $i++; ?>
@@ -380,7 +449,7 @@
 										}
 									</script>
                                     <ol>
-                                        <?php while ( $locations->have_posts() ) : $locations->the_post(); ?>
+                                        <?php while ( $physician_locations->have_posts() ) : $physician_locations->the_post(); ?>
                                         <li itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
 								        <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
 								            <p><span itemprop="streetAddress"><?php echo rwmb_meta('location_address_1', $args, get_the_ID() ); ?><br/>
@@ -419,26 +488,6 @@
 									{ ?>
 										<a href="<?php echo rwmb_meta('physician_research_profiles_link'); ?>" target="_blank">UAMS TRI Profiles</a>
 								<?php }
-								?>
-	                        </div>
-	                    <?php endif; ?>
-						<?php
-							$awards = rwmb_meta('physician_awards');
-							if(! empty( $awards ) || rwmb_meta('physician_additional_info')): ?>
-	                        <div id="tab-info" class="js-tabcontent tabs__uams__tabcontent">
-	                            <?php if(! empty( $awards ) ): ?>
-	                            	<h3>Awards</h3>
-								    <ul>
-								    <?php foreach ( $awards as $award ) { ?>
-								        <li><?php echo $award['award_title']; ?> (<?php echo $award['award_year']; ?>)<?php echo ($award['award_infor'] ? '<br/>' . $award['award_infor'] : ''); ?></li>
-								    <?php } ?>
-								    </ul>
-								<?php endif; ?>
-								<?php
-									if(rwmb_meta('physician_additional_info'))
-									{
-										echo rwmb_meta('physician_additional_info');
-									}
 								?>
 	                        </div>
 	                    <?php endif; ?>
@@ -521,7 +570,7 @@
 								$('.ds-summary').attr('itemscope', '');
 								$('.ds-average').attr('itemprop', 'ratingValue');
 								$('.ds-ratingcount').attr('itemprop', 'ratingCount');
-								$('.ds-comments').wrapInner('<a href="#PatientRatings"></a>');
+								// $('.ds-comments').wrapInner('<a href="#PatientRatings"></a>');
 							});
 						});
 					})(jQuery);
@@ -531,10 +580,12 @@
 			</div>
 
 		    </div><!-- #Physician Schema -->
-			<script src="<?php echo get_stylesheet_directory_uri(); ?>/assets/js/jquery-accessible-modal-window-aria.js"></script>
+			<?php if ( ! rwmb_meta('physician_npi') || ! $rating_valid ) { ?>
+			<script src="<?php echo get_stylesheet_directory_uri(); ?>/assets/js/jquery-modal.min.js"></script>
 			<div id="why_not_modal" class="hidden">
 				There is no publicly available rating for this medical professional for one of two reasons: 1) he or she does not see patients or 2) he or she sees patients but has not yet received the minimum number of Patient Satisfaction Reviews. To be eligible for display, we require a minimum of 30 surveys. This ensures that the rating is statistically reliable and a true reflection of patient satisfaction.
 			</div>
+			<?php } ?>
 		  </div><!-- #main_content -->
 
     	</div><!-- uams-content -->
