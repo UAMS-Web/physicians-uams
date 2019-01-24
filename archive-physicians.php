@@ -79,7 +79,7 @@
 						<?php //echo facetwp_display( 'pager' ); ?>
 						<?php //echo do_shortcode('[facetwp load_more="true" label="Load more"]'); ?>
 
-						<script src="<?php echo get_stylesheet_directory_uri(); ?>/assets/js/jquery-accessible-modal-window-aria.js"></script>
+						<script src="<?php echo get_stylesheet_directory_uri(); ?>/assets/js/jquery-modal.min.js"></script>
 						<div id="why_not_modal" class="hidden">
 							There is no publicly available rating for this medical professional for one of two reasons: 1) he or she does not see patients or 2) he or she sees patients but has not yet received the minimum number of Patient Satisfaction Reviews. To be eligible for display, we require a minimum of 30 surveys. This ensures that the rating is statistically reliable and a true reflection of patient satisfaction.
 						</div>
