@@ -146,7 +146,7 @@ Version: 1.0
 .flexible-widgets.widget-fourths .widget {
 	width: 25%;
 }
-background-size: 410px;
+/* background-size: 410px; */
 .flexible-widgets.widget-halves .widget {
 	width: 50%;
 }
